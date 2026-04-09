@@ -4901,6 +4901,18 @@ a.publish-checklist-label:hover {
   text-transform: uppercase;
   color: var(--tp-text-muted);
 }
+.taste-profile-image-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  font-family: var(--tp-font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tp-text-muted);
+}
 
 .taste-profile-recipe-refresh {
   text-align: center;
@@ -5084,6 +5096,54 @@ a.publish-checklist-label:hover {
 
 .taste-profile-info-btn:hover {
   color: rgba(0, 0, 0, 0.65);
+}
+
+/* Axis info tooltip button & text */
+.taste-profile-slider-label-row,
+.onboarding-axis-label-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.onboarding-axis-label-row {
+  margin-bottom: 4px;
+}
+
+.taste-profile-axis-info-btn {
+  background: none;
+  border: none;
+  color: rgba(0, 0, 0, 0.30);
+  cursor: pointer;
+  padding: 0 0 0 5px;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.taste-profile-axis-info-btn:hover {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.taste-profile-axis-info-text {
+  width: 100%;
+  margin: 2px 0 4px;
+  padding: 6px 10px;
+  font-family: var(--tp-font-sans, sans-serif);
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.03);
+  border-left: 2px solid rgba(0, 0, 0, 0.10);
+  border-radius: 2px;
+  animation: axisInfoFadeIn 0.15s ease;
+}
+
+@keyframes axisInfoFadeIn {
+  from { opacity: 0; transform: translateY(-3px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .taste-profile-card-actions {

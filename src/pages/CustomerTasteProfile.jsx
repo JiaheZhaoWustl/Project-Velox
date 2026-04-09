@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import CustomerLayout from '../components/CustomerLayout'
 import TasteProfileSliderRow from '../components/TasteProfileSliderRow'
-import { AROMAS, FEELINGS } from '../constants/tasteProfile'
+import { AROMAS, FEELINGS, AXIS_INFO } from '../constants/tasteProfile'
 import { useTasteProfileActions } from '../hooks/useTasteProfile'
 import { useCustomerTasteProfilePage } from '../hooks/useCustomerTasteProfilePage'
 import {
@@ -52,45 +52,68 @@ function CustomerTasteProfile() {
   const [showCustomizations, setShowCustomizations] = useState(false)
   const [cocktailImageUrl, setCocktailImageUrl] = useState(null)
   const [imageLoading, setImageLoading] = useState(false)
+  const [imageError, setImageError] = useState(null)
 
   const topRecs = recommendations?.top_recommendations || []
   const hasRecs = topRecs.length > 0
   const currentRec = hasRecs ? topRecs[selectedRecIndex] : null
   const displayCocktail = buildDisplayCocktail(currentRec) || MOCK_COCKTAIL
 
-  useEffect(() => {
-    setSavedForCurrent(false)
-    setSaveMsg(null)
-    setShowCustomizations(false)
-    setCocktailImageUrl(null)
-  }, [currentRec?.recipe_id, selectedRecIndex])
-
-  useEffect(() => {
-    if (!hasRecs || !currentRec?.recipe_name) return
-    const name = currentRec.recipe_name
+  const fetchCocktailImage = useCallback((name, glassware, { skipCache = false } = {}) => {
     const cacheKey = `cocktailImage_${name}`
-    const cached = localStorage.getItem(cacheKey)
-    if (cached) {
-      setCocktailImageUrl(cached)
-      return
+    if (!skipCache) {
+      const cached = localStorage.getItem(cacheKey)
+      if (cached) {
+        setCocktailImageUrl(cached)
+        return
+      }
+    } else {
+      localStorage.removeItem(cacheKey)
     }
     let cancelled = false
     setImageLoading(true)
+    setImageError(null)
     cocktailImageApi
-      .generate({
-        cocktailName: name,
-        glassware: currentRec.recipe?.glassware || '',
-      })
+      .generate({ cocktailName: name, glassware: glassware || '' })
       .then((data) => {
         if (!cancelled && data.imageUrl) {
           setCocktailImageUrl(data.imageUrl)
           localStorage.setItem(cacheKey, data.imageUrl)
         }
       })
-      .catch(() => {})
+      .catch((err) => {
+        if (!cancelled) setImageError(err.message || 'Could not generate image')
+      })
       .finally(() => { if (!cancelled) setImageLoading(false) })
     return () => { cancelled = true }
-  }, [hasRecs, currentRec?.recipe_name])
+  }, [])
+
+  useEffect(() => {
+    setSavedForCurrent(false)
+    setSaveMsg(null)
+    setShowCustomizations(false)
+    setCocktailImageUrl(null)
+    setImageError(null)
+  }, [currentRec?.recipe_id, selectedRecIndex])
+
+  useEffect(() => {
+    if (!hasRecs || !currentRec?.recipe_name) return
+    return fetchCocktailImage(currentRec.recipe_name, currentRec.recipe?.glassware)
+  }, [hasRecs, currentRec?.recipe_name, fetchCocktailImage])
+
+  const handleImageError = useCallback(() => {
+    if (!currentRec?.recipe_name) return
+    localStorage.removeItem(`cocktailImage_${currentRec.recipe_name}`)
+    setCocktailImageUrl(null)
+    setImageError('Image failed to load')
+  }, [currentRec?.recipe_name])
+
+  const retryImage = useCallback(() => {
+    if (!currentRec?.recipe_name) return
+    setCocktailImageUrl(null)
+    setImageError(null)
+    fetchCocktailImage(currentRec.recipe_name, currentRec.recipe?.glassware, { skipCache: true })
+  }, [currentRec?.recipe_name, currentRec?.recipe?.glassware, fetchCocktailImage])
 
   const saveToCollection = useCallback(async () => {
     setSaveMsg(null)
@@ -192,9 +215,21 @@ function CustomerTasteProfile() {
             )}
             <div className="taste-profile-cocktail-image">
               {cocktailImageUrl ? (
-                <img src={cocktailImageUrl} alt={displayCocktail.name} className="taste-profile-cocktail-img" />
+                <img
+                  src={cocktailImageUrl}
+                  alt={displayCocktail.name}
+                  className="taste-profile-cocktail-img"
+                  onError={handleImageError}
+                />
               ) : imageLoading ? (
                 <span className="taste-profile-image-loading">Generating image…</span>
+              ) : imageError ? (
+                <div className="taste-profile-image-error">
+                  <span>{imageError}</span>
+                  <button type="button" className="tp-btn tp-btn--secondary" onClick={retryImage}>
+                    Retry
+                  </button>
+                </div>
               ) : null}
             </div>
             {displayCocktail.needsRecipeRefresh && hasRecs ? (
@@ -286,6 +321,7 @@ function CustomerTasteProfile() {
                   label={label}
                   value={value}
                   onChange={(v) => handleTasteChange(key, v)}
+                  info={AXIS_INFO[key]}
                 />
               )
             })}
@@ -300,6 +336,7 @@ function CustomerTasteProfile() {
                 onChange={handleStrengthChange}
                 lowLabel="Light"
                 highLabel="Strong"
+                info={AXIS_INFO.strength}
               />
               <div className="taste-profile-mocktail-under">
                 <span className="taste-profile-mocktail-label">Mocktail</span>
@@ -353,6 +390,7 @@ function CustomerTasteProfile() {
               onChange={(v) => savePreferences({ ...preferences, mouthfeelRoughSmooth: v })}
               lowLabel="Rough"
               highLabel="Smooth"
+              info={AXIS_INFO.mouthfeelRoughSmooth}
             />
             <TasteProfileSliderRow
               label="Crisp vs. dense"
@@ -360,6 +398,7 @@ function CustomerTasteProfile() {
               onChange={(v) => savePreferences({ ...preferences, mouthfeelCrispDense: v })}
               lowLabel="Crisp"
               highLabel="Dense"
+              info={AXIS_INFO.mouthfeelCrispDense}
             />
             <TasteProfileSliderRow
               label="Flat vs. sparkling"
@@ -367,6 +406,7 @@ function CustomerTasteProfile() {
               onChange={(v) => savePreferences({ ...preferences, mouthfeelFlatSparkling: v })}
               lowLabel="Flat"
               highLabel="Sparkling"
+              info={AXIS_INFO.mouthfeelFlatSparkling}
             />
             <TasteProfileSliderRow
               label="Clear vs. creamy"
@@ -374,6 +414,7 @@ function CustomerTasteProfile() {
               onChange={(v) => savePreferences({ ...preferences, mouthfeelClearCreamy: v })}
               lowLabel="Clear"
               highLabel="Creamy"
+              info={AXIS_INFO.mouthfeelClearCreamy}
             />
           </section>
 
@@ -412,6 +453,7 @@ function CustomerTasteProfile() {
               label="Classic ←→ experimental"
               value={preferences.adventurous ?? 5}
               onChange={(v) => savePreferences({ ...preferences, adventurous: v })}
+              info={AXIS_INFO.adventurous}
             />
           </section>
 

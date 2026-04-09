@@ -50,7 +50,9 @@ app.post('/api/recommendations', async (req, res) => {
   }
 })
 
-// Serve generated cocktail images
+// Serve generated cocktail images (ensure directory exists for express.static)
+const fs = require('fs')
+fs.mkdirSync(GENERATED_IMAGES_DIR, { recursive: true })
 app.use('/api/generated-images', express.static(GENERATED_IMAGES_DIR))
 
 // POST /api/cocktail-image — generate a cocktail image via DALL-E

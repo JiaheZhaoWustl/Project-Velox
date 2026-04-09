@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CustomerLayout from '../components/CustomerLayout'
 import DragSlider from '../components/DragSlider'
-import { AROMAS, FEELINGS, SCALE_LABELS, DEFAULT_PREFS } from '../constants/tasteProfile'
+import { AROMAS, FEELINGS, SCALE_LABELS, DEFAULT_PREFS, AXIS_INFO } from '../constants/tasteProfile'
 import { useTasteProfileActions } from '../hooks/useTasteProfile'
 import { tasteProfileApi, recommendationsApi, customerApi } from '../services/api'
 
@@ -18,6 +18,30 @@ function SliderInput({ value, onChange, labels = SCALE_LABELS.taste, min = 1, ma
       step={1}
       labels={labels}
     />
+  )
+}
+
+function AxisLabel({ text, info }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="onboarding-axis-label-row">
+      <label>{text}</label>
+      {info && (
+        <button
+          type="button"
+          className="taste-profile-axis-info-btn"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={`What does "${text}" mean?`}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+        </button>
+      )}
+      {open && <p className="taste-profile-axis-info-text">{info}</p>}
+    </div>
   )
 }
 
@@ -167,7 +191,7 @@ function CustomerOnboarding() {
           <div className="onboarding-form">
             {['sweetness', 'sourness', 'bitterness', 'saltiness', 'umami'].map((key) => (
               <div key={key} className="onboarding-field">
-                <label>{key.charAt(0).toUpperCase() + key.slice(1)}</label>
+                <AxisLabel text={key.charAt(0).toUpperCase() + key.slice(1)} info={AXIS_INFO[key]} />
                 <SliderInput value={preferences[key]} onChange={(v) => setPreferences((p) => ({ ...p, [key]: v }))} />
               </div>
             ))}
@@ -204,7 +228,7 @@ function CustomerOnboarding() {
           <h2 className="onboarding-title">Strength</h2>
           <div className="onboarding-form">
             <div className="onboarding-field">
-              <label>Light / refreshing ←→ Strong / Bold</label>
+              <AxisLabel text="Light / refreshing ←→ Strong / Bold" info={AXIS_INFO.strength} />
               <DragSlider
                 value={preferences.mocktail === 1 ? 0 : preferences.strength}
                 onChange={handleStrengthChange}
@@ -281,7 +305,7 @@ function CustomerOnboarding() {
           <h2 className="onboarding-title">Mouthfeel</h2>
           <div className="onboarding-form">
             <div className="onboarding-field">
-              <label>Rough vs. Smooth</label>
+              <AxisLabel text="Rough vs. Smooth" info={AXIS_INFO.mouthfeelRoughSmooth} />
               <SliderInput
                 value={preferences.mouthfeelRoughSmooth}
                 onChange={(v) => setPreferences((p) => ({ ...p, mouthfeelRoughSmooth: v }))}
@@ -289,7 +313,7 @@ function CustomerOnboarding() {
               />
             </div>
             <div className="onboarding-field">
-              <label>Crisp vs. Dense</label>
+              <AxisLabel text="Crisp vs. Dense" info={AXIS_INFO.mouthfeelCrispDense} />
               <SliderInput
                 value={preferences.mouthfeelCrispDense}
                 onChange={(v) => setPreferences((p) => ({ ...p, mouthfeelCrispDense: v }))}
@@ -297,7 +321,7 @@ function CustomerOnboarding() {
               />
             </div>
             <div className="onboarding-field">
-              <label>Flat vs. Sparkling</label>
+              <AxisLabel text="Flat vs. Sparkling" info={AXIS_INFO.mouthfeelFlatSparkling} />
               <SliderInput
                 value={preferences.mouthfeelFlatSparkling}
                 onChange={(v) => setPreferences((p) => ({ ...p, mouthfeelFlatSparkling: v }))}
@@ -305,7 +329,7 @@ function CustomerOnboarding() {
               />
             </div>
             <div className="onboarding-field">
-              <label>Clear vs. Creamy</label>
+              <AxisLabel text="Clear vs. Creamy" info={AXIS_INFO.mouthfeelClearCreamy} />
               <SliderInput
                 value={preferences.mouthfeelClearCreamy}
                 onChange={(v) => setPreferences((p) => ({ ...p, mouthfeelClearCreamy: v }))}
@@ -329,6 +353,7 @@ function CustomerOnboarding() {
           <StepProgress />
           <h2 className="onboarding-title">Adventurousness</h2>
           <div className="onboarding-form">
+            <AxisLabel text="Classic ←→ Experimental" info={AXIS_INFO.adventurous} />
             <SliderInput
               value={preferences.adventurous}
               onChange={(v) => setPreferences((p) => ({ ...p, adventurous: v }))}

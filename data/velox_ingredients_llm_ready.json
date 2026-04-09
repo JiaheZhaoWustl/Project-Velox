@@ -1,0 +1,1064 @@
+{
+  "schema_version": "velox.v1",
+  "shared_matching_axes": {
+    "taste_profile": [
+      "sweetness",
+      "sourness",
+      "bitterness",
+      "saltiness",
+      "umami"
+    ],
+    "mouthfeel_profile": [
+      "rough_smooth",
+      "crisp_dense",
+      "flat_sparkling",
+      "clear_creamy"
+    ],
+    "experience_profile": [
+      "strength",
+      "adventurousness"
+    ]
+  },
+  "ingredients": [
+    {
+      "id": "vodka",
+      "name": "Vodka",
+      "category": "spirit",
+      "sub_category": "neutral_spirit",
+      "abv": 40,
+      "roles": [
+        "base_spirit"
+      ],
+      "taste_profile": {
+        "sweetness": 0,
+        "sourness": 0,
+        "bitterness": 0,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 4,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": 8,
+      "aroma_tags": [
+        "neutral",
+        "clean"
+      ],
+      "mood_tags": [
+        "minimal",
+        "clean"
+      ],
+      "pairing_tags": [
+        "citrus",
+        "fruit",
+        "herbal",
+        "floral"
+      ],
+      "common_families": [
+        "martini",
+        "sour",
+        "highball",
+        "spritz"
+      ]
+    },
+    {
+      "id": "gin",
+      "name": "Gin",
+      "category": "spirit",
+      "sub_category": "juniper_spirit",
+      "abv": 40,
+      "roles": [
+        "base_spirit"
+      ],
+      "taste_profile": {
+        "sweetness": 0,
+        "sourness": 0,
+        "bitterness": 1,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 4,
+        "crisp_dense": 5,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": 8,
+      "aroma_tags": [
+        "juniper",
+        "herbal",
+        "citrus_peel",
+        "pine"
+      ],
+      "mood_tags": [
+        "bright",
+        "refined",
+        "fresh"
+      ],
+      "pairing_tags": [
+        "vermouth",
+        "campari",
+        "elderflower",
+        "citrus",
+        "mint"
+      ],
+      "common_families": [
+        "martini",
+        "negroni",
+        "sour",
+        "highball",
+        "spritz"
+      ]
+    },
+    {
+      "id": "rum",
+      "name": "Rum",
+      "category": "spirit",
+      "sub_category": "sugarcane_spirit",
+      "abv": 40,
+      "roles": [
+        "base_spirit"
+      ],
+      "taste_profile": {
+        "sweetness": 1,
+        "sourness": 0,
+        "bitterness": 0,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 6,
+        "flat_sparkling": 1,
+        "clear_creamy": 2
+      },
+      "strength_impact": 8,
+      "aroma_tags": [
+        "molasses",
+        "vanilla",
+        "tropical"
+      ],
+      "mood_tags": [
+        "warm",
+        "playful",
+        "relaxed"
+      ],
+      "pairing_tags": [
+        "lime",
+        "pineapple",
+        "passionfruit",
+        "mint",
+        "coconut"
+      ],
+      "common_families": [
+        "daiquiri",
+        "smash",
+        "tropical",
+        "highball"
+      ]
+    },
+    {
+      "id": "whiskey",
+      "name": "Whiskey",
+      "category": "spirit",
+      "sub_category": "aged_spirit",
+      "abv": 40,
+      "roles": [
+        "base_spirit"
+      ],
+      "taste_profile": {
+        "sweetness": 1,
+        "sourness": 0,
+        "bitterness": 1,
+        "saltiness": 0,
+        "umami": 1
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 4,
+        "crisp_dense": 8,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": 9,
+      "aroma_tags": [
+        "woody",
+        "oak",
+        "spice",
+        "vanilla"
+      ],
+      "mood_tags": [
+        "nostalgic",
+        "serious",
+        "warm"
+      ],
+      "pairing_tags": [
+        "sweet_vermouth",
+        "campari",
+        "honey",
+        "lemon",
+        "orange_bitters"
+      ],
+      "common_families": [
+        "manhattan",
+        "boulevardier",
+        "sour",
+        "highball"
+      ]
+    },
+    {
+      "id": "tequila",
+      "name": "Tequila",
+      "category": "spirit",
+      "sub_category": "agave_spirit",
+      "abv": 40,
+      "roles": [
+        "base_spirit"
+      ],
+      "taste_profile": {
+        "sweetness": 0,
+        "sourness": 0,
+        "bitterness": 1,
+        "saltiness": 0,
+        "umami": 1
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 4,
+        "crisp_dense": 6,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": 8,
+      "aroma_tags": [
+        "agave",
+        "earthy",
+        "pepper",
+        "green"
+      ],
+      "mood_tags": [
+        "bold",
+        "sunny",
+        "energetic"
+      ],
+      "pairing_tags": [
+        "lime",
+        "triple_sec",
+        "pineapple",
+        "campari"
+      ],
+      "common_families": [
+        "margarita",
+        "highball",
+        "negroni_variant"
+      ]
+    },
+    {
+      "id": "sweet_vermouth",
+      "name": "Sweet Vermouth",
+      "category": "fortified_wine",
+      "sub_category": "aromatized_wine",
+      "abv": 16,
+      "roles": [
+        "bridging_modifier",
+        "sweet_modifier",
+        "aromatic_modifier"
+      ],
+      "taste_profile": {
+        "sweetness": 4,
+        "sourness": 0,
+        "bitterness": 2,
+        "saltiness": 0,
+        "umami": 1
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 6,
+        "crisp_dense": 5,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": 3,
+      "aroma_tags": [
+        "herbal",
+        "spice",
+        "grape",
+        "earthy"
+      ],
+      "mood_tags": [
+        "classic",
+        "old_world",
+        "relaxed"
+      ],
+      "pairing_tags": [
+        "whiskey",
+        "gin",
+        "campari"
+      ],
+      "common_families": [
+        "manhattan",
+        "negroni",
+        "boulevardier"
+      ]
+    },
+    {
+      "id": "dry_vermouth",
+      "name": "Dry Vermouth",
+      "category": "fortified_wine",
+      "sub_category": "aromatized_wine",
+      "abv": 16,
+      "roles": [
+        "bridging_modifier",
+        "drying_modifier",
+        "aromatic_modifier"
+      ],
+      "taste_profile": {
+        "sweetness": 1,
+        "sourness": 0,
+        "bitterness": 2,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 6,
+        "crisp_dense": 4,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": 2,
+      "aroma_tags": [
+        "herbal",
+        "floral",
+        "dry"
+      ],
+      "mood_tags": [
+        "elegant",
+        "clean",
+        "classic"
+      ],
+      "pairing_tags": [
+        "gin",
+        "vodka",
+        "orange_bitters"
+      ],
+      "common_families": [
+        "martini"
+      ]
+    },
+    {
+      "id": "triple_sec",
+      "name": "Triple Sec",
+      "category": "liqueur",
+      "sub_category": "orange_liqueur",
+      "abv": 20,
+      "roles": [
+        "sweet_modifier",
+        "citrus_modifier",
+        "bridging_modifier"
+      ],
+      "taste_profile": {
+        "sweetness": 5,
+        "sourness": 0,
+        "bitterness": 1,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 6,
+        "crisp_dense": 4,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": 2,
+      "aroma_tags": [
+        "orange",
+        "citrus_peel"
+      ],
+      "mood_tags": [
+        "bright",
+        "approachable"
+      ],
+      "pairing_tags": [
+        "tequila",
+        "lime",
+        "gin",
+        "pineapple"
+      ],
+      "common_families": [
+        "margarita",
+        "daisy",
+        "spritz"
+      ]
+    },
+    {
+      "id": "elderflower_liqueur",
+      "name": "Elderflower Liqueur",
+      "category": "liqueur",
+      "sub_category": "floral_liqueur",
+      "abv": 20,
+      "roles": [
+        "sweet_modifier",
+        "floral_modifier",
+        "bridging_modifier"
+      ],
+      "taste_profile": {
+        "sweetness": 5,
+        "sourness": 0,
+        "bitterness": 0,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 6,
+        "crisp_dense": 4,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": 2,
+      "aroma_tags": [
+        "floral",
+        "honeysuckle",
+        "lychee_like"
+      ],
+      "mood_tags": [
+        "romantic",
+        "soft",
+        "playful"
+      ],
+      "pairing_tags": [
+        "gin",
+        "vodka",
+        "soda_water",
+        "lemon_juice"
+      ],
+      "common_families": [
+        "spritz",
+        "sour"
+      ]
+    },
+    {
+      "id": "maraschino_liqueur",
+      "name": "Maraschino Liqueur",
+      "category": "liqueur",
+      "sub_category": "fruit_liqueur",
+      "abv": 32,
+      "roles": [
+        "sweet_modifier",
+        "aromatic_modifier",
+        "bridging_modifier"
+      ],
+      "taste_profile": {
+        "sweetness": 4,
+        "sourness": 0,
+        "bitterness": 1,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 6,
+        "crisp_dense": 4,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": 3,
+      "aroma_tags": [
+        "cherry",
+        "almond",
+        "floral"
+      ],
+      "mood_tags": [
+        "curious",
+        "vintage"
+      ],
+      "pairing_tags": [
+        "gin",
+        "lemon_juice"
+      ],
+      "common_families": [
+        "aviation_style",
+        "last_word_style"
+      ]
+    },
+    {
+      "id": "campari",
+      "name": "Campari",
+      "category": "bitter_liqueur",
+      "sub_category": "amaro",
+      "abv": 24,
+      "roles": [
+        "bitter_modifier",
+        "sweet_modifier",
+        "aromatic_modifier"
+      ],
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 0,
+        "bitterness": 9,
+        "saltiness": 0,
+        "umami": 1
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 6,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": 2,
+      "aroma_tags": [
+        "orange_peel",
+        "herbal",
+        "bitter",
+        "earthy"
+      ],
+      "mood_tags": [
+        "bold",
+        "adult",
+        "contemplative"
+      ],
+      "pairing_tags": [
+        "gin",
+        "whiskey",
+        "sweet_vermouth",
+        "soda_water",
+        "tequila"
+      ],
+      "common_families": [
+        "negroni",
+        "boulevardier",
+        "americano_style"
+      ]
+    },
+    {
+      "id": "angostura_bitters",
+      "name": "Angostura Bitters",
+      "category": "bitters",
+      "sub_category": "aromatic_bitters",
+      "abv": 44.7,
+      "roles": [
+        "seasoning",
+        "bitter_modifier",
+        "spice_modifier"
+      ],
+      "taste_profile": {
+        "sweetness": 0,
+        "sourness": 0,
+        "bitterness": 8,
+        "saltiness": 0,
+        "umami": 1
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 5,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": 1,
+      "aroma_tags": [
+        "spice",
+        "clove",
+        "cinnamon",
+        "herbal"
+      ],
+      "mood_tags": [
+        "classic",
+        "warm"
+      ],
+      "pairing_tags": [
+        "whiskey",
+        "sweet_vermouth",
+        "rum"
+      ],
+      "common_families": [
+        "manhattan",
+        "old_fashioned_style",
+        "highball"
+      ]
+    },
+    {
+      "id": "orange_bitters",
+      "name": "Orange Bitters",
+      "category": "bitters",
+      "sub_category": "citrus_bitters",
+      "abv": 28,
+      "roles": [
+        "seasoning",
+        "citrus_modifier",
+        "bitter_modifier"
+      ],
+      "taste_profile": {
+        "sweetness": 0,
+        "sourness": 0,
+        "bitterness": 6,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 4,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": 1,
+      "aroma_tags": [
+        "orange_peel",
+        "dry",
+        "spice"
+      ],
+      "mood_tags": [
+        "clean",
+        "refined"
+      ],
+      "pairing_tags": [
+        "gin",
+        "vodka",
+        "dry_vermouth",
+        "whiskey"
+      ],
+      "common_families": [
+        "martini",
+        "highball"
+      ]
+    },
+    {
+      "id": "lemon_juice",
+      "name": "Lemon Juice",
+      "category": "citrus",
+      "sub_category": "fresh_juice",
+      "abv": 0,
+      "roles": [
+        "acidifier",
+        "brightener"
+      ],
+      "taste_profile": {
+        "sweetness": 0,
+        "sourness": 9,
+        "bitterness": 1,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 3,
+        "crisp_dense": 2,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": -1,
+      "aroma_tags": [
+        "citrus",
+        "bright"
+      ],
+      "mood_tags": [
+        "fresh",
+        "lively"
+      ],
+      "pairing_tags": [
+        "gin",
+        "whiskey",
+        "elderflower_liqueur",
+        "honey_syrup"
+      ],
+      "common_families": [
+        "sour",
+        "smash",
+        "daisy"
+      ]
+    },
+    {
+      "id": "lime_juice",
+      "name": "Lime Juice",
+      "category": "citrus",
+      "sub_category": "fresh_juice",
+      "abv": 0,
+      "roles": [
+        "acidifier",
+        "brightener"
+      ],
+      "taste_profile": {
+        "sweetness": 0,
+        "sourness": 9,
+        "bitterness": 1,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 3,
+        "crisp_dense": 2,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": -1,
+      "aroma_tags": [
+        "citrus",
+        "green",
+        "zesty"
+      ],
+      "mood_tags": [
+        "bright",
+        "playful"
+      ],
+      "pairing_tags": [
+        "rum",
+        "tequila",
+        "triple_sec",
+        "mint",
+        "passionfruit"
+      ],
+      "common_families": [
+        "daiquiri",
+        "margarita",
+        "smash",
+        "tropical"
+      ]
+    },
+    {
+      "id": "pineapple",
+      "name": "Pineapple",
+      "category": "fruit",
+      "sub_category": "juice_or_puree",
+      "abv": 0,
+      "roles": [
+        "fruit_modifier",
+        "sweet_modifier",
+        "texture_softener"
+      ],
+      "taste_profile": {
+        "sweetness": 6,
+        "sourness": 3,
+        "bitterness": 0,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 5,
+        "flat_sparkling": 1,
+        "clear_creamy": 2
+      },
+      "strength_impact": -1,
+      "aroma_tags": [
+        "tropical",
+        "juicy",
+        "bright"
+      ],
+      "mood_tags": [
+        "vacation",
+        "fun",
+        "sunny"
+      ],
+      "pairing_tags": [
+        "rum",
+        "tequila",
+        "coconut_cream",
+        "triple_sec"
+      ],
+      "common_families": [
+        "tropical",
+        "highball"
+      ]
+    },
+    {
+      "id": "passionfruit",
+      "name": "Passionfruit",
+      "category": "fruit",
+      "sub_category": "puree_or_syrup",
+      "abv": 0,
+      "roles": [
+        "fruit_modifier",
+        "acid_modifier",
+        "aromatic_modifier"
+      ],
+      "taste_profile": {
+        "sweetness": 5,
+        "sourness": 5,
+        "bitterness": 0,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 4,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": -1,
+      "aroma_tags": [
+        "tropical",
+        "perfumed",
+        "bright"
+      ],
+      "mood_tags": [
+        "playful",
+        "experimental"
+      ],
+      "pairing_tags": [
+        "rum",
+        "vodka",
+        "lime_juice",
+        "soda_water"
+      ],
+      "common_families": [
+        "tropical",
+        "spritz",
+        "sour"
+      ]
+    },
+    {
+      "id": "simple_syrup",
+      "name": "Simple Syrup",
+      "category": "sweetener",
+      "sub_category": "syrup",
+      "abv": 0,
+      "roles": [
+        "sweet_modifier",
+        "balancer"
+      ],
+      "taste_profile": {
+        "sweetness": 9,
+        "sourness": 0,
+        "bitterness": 0,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 6,
+        "crisp_dense": 3,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": -1,
+      "aroma_tags": [
+        "neutral"
+      ],
+      "mood_tags": [
+        "balanced"
+      ],
+      "pairing_tags": [
+        "all"
+      ],
+      "common_families": [
+        "sour",
+        "smash",
+        "tropical"
+      ]
+    },
+    {
+      "id": "honey_syrup",
+      "name": "Honey Syrup",
+      "category": "sweetener",
+      "sub_category": "syrup",
+      "abv": 0,
+      "roles": [
+        "sweet_modifier",
+        "texture_softener",
+        "aromatic_modifier"
+      ],
+      "taste_profile": {
+        "sweetness": 8,
+        "sourness": 0,
+        "bitterness": 0,
+        "saltiness": 0,
+        "umami": 1
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 7,
+        "crisp_dense": 5,
+        "flat_sparkling": 1,
+        "clear_creamy": 2
+      },
+      "strength_impact": -1,
+      "aroma_tags": [
+        "honey",
+        "floral",
+        "warm"
+      ],
+      "mood_tags": [
+        "comforting",
+        "soft"
+      ],
+      "pairing_tags": [
+        "whiskey",
+        "gin",
+        "lemon_juice"
+      ],
+      "common_families": [
+        "sour",
+        "bee_knees_style"
+      ]
+    },
+    {
+      "id": "mint",
+      "name": "Mint",
+      "category": "herb",
+      "sub_category": "fresh_herb",
+      "abv": 0,
+      "roles": [
+        "aromatic_modifier",
+        "freshness_modifier"
+      ],
+      "taste_profile": {
+        "sweetness": 0,
+        "sourness": 0,
+        "bitterness": 1,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 4,
+        "crisp_dense": 2,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "strength_impact": 0,
+      "aroma_tags": [
+        "mint",
+        "cooling",
+        "green"
+      ],
+      "mood_tags": [
+        "fresh",
+        "uplifting"
+      ],
+      "pairing_tags": [
+        "rum",
+        "lime_juice",
+        "passionfruit",
+        "soda_water"
+      ],
+      "common_families": [
+        "smash",
+        "cooler",
+        "tropical"
+      ]
+    },
+    {
+      "id": "coconut_cream",
+      "name": "Coconut Cream",
+      "category": "texture",
+      "sub_category": "cream",
+      "abv": 0,
+      "roles": [
+        "texture_modifier",
+        "sweet_modifier",
+        "tropical_modifier"
+      ],
+      "taste_profile": {
+        "sweetness": 6,
+        "sourness": 0,
+        "bitterness": 0,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 8,
+        "crisp_dense": 7,
+        "flat_sparkling": 1,
+        "clear_creamy": 9
+      },
+      "strength_impact": -2,
+      "aroma_tags": [
+        "coconut",
+        "sweet",
+        "tropical"
+      ],
+      "mood_tags": [
+        "indulgent",
+        "vacation"
+      ],
+      "pairing_tags": [
+        "rum",
+        "vodka",
+        "pineapple"
+      ],
+      "common_families": [
+        "creamy_tropical"
+      ]
+    },
+    {
+      "id": "soda_water",
+      "name": "Soda Water",
+      "category": "carbonation",
+      "sub_category": "sparkling_mixer",
+      "abv": 0,
+      "roles": [
+        "dilution",
+        "sparkling_modifier",
+        "lengthener"
+      ],
+      "taste_profile": {
+        "sweetness": 0,
+        "sourness": 0,
+        "bitterness": 0,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 2,
+        "flat_sparkling": 9,
+        "clear_creamy": 1
+      },
+      "strength_impact": -2,
+      "aroma_tags": [
+        "neutral"
+      ],
+      "mood_tags": [
+        "refreshing",
+        "light"
+      ],
+      "pairing_tags": [
+        "gin",
+        "rum",
+        "campari",
+        "elderflower_liqueur"
+      ],
+      "common_families": [
+        "highball",
+        "spritz",
+        "cooler"
+      ]
+    },
+    {
+      "id": "tonic_water",
+      "name": "Tonic Water",
+      "category": "carbonation",
+      "sub_category": "bitter_sparkling_mixer",
+      "abv": 0,
+      "roles": [
+        "dilution",
+        "sparkling_modifier",
+        "bitter_modifier"
+      ],
+      "taste_profile": {
+        "sweetness": 2,
+        "sourness": 0,
+        "bitterness": 4,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 2,
+        "flat_sparkling": 9,
+        "clear_creamy": 1
+      },
+      "strength_impact": -2,
+      "aroma_tags": [
+        "quinine",
+        "citrus"
+      ],
+      "mood_tags": [
+        "refreshing",
+        "grown_up"
+      ],
+      "pairing_tags": [
+        "gin",
+        "vodka",
+        "tequila"
+      ],
+      "common_families": [
+        "gin_and_tonic",
+        "highball"
+      ]
+    }
+  ]
+}

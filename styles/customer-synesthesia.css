@@ -1,0 +1,195 @@
+/**
+ * Customer surfaces — light canvas, dark type (aligned with staff login / iPad panel).
+ * Inverse of the earlier black-canvas experiment; keeps one coherent scheme.
+ */
+.customer-layout,
+.customer-login-screen {
+    --app-bg: #fafafa;
+    --app-text: #1a1a1a;
+    --app-muted: rgba(0, 0, 0, 0.55);
+    --app-accent: #2d2d32;
+    --app-border: rgba(0, 0, 0, 0.12);
+}
+
+.customer-layout {
+    background-color: var(--app-bg);
+    color: var(--app-text);
+}
+
+.customer-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.customer-brand,
+.customer-brand-text {
+    color: #1a1a1a;
+}
+
+.customer-logo-placeholder {
+    background: #e5e7eb;
+}
+
+.customer-nav-link {
+    color: #666;
+}
+
+.customer-nav-link:hover {
+    color: #1a1a1a;
+    background: #f5f5f5;
+}
+
+.customer-nav-link.active {
+    color: var(--app-accent);
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.customer-lang-btn {
+    background: #fff;
+    border-color: #e5e7eb;
+    color: #666;
+}
+
+.customer-lang-dropdown {
+    background: #fff;
+    border-color: #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.customer-lang-option {
+    color: #1a1a1a;
+}
+
+.customer-lang-option:hover {
+    background: #f5f5f5;
+}
+
+.customer-logout-btn {
+    background: #fff;
+    border-color: #e5e7eb;
+    color: #666;
+}
+
+.customer-page-title {
+    color: #1a1a1a;
+}
+
+.customer-page-placeholder {
+    color: rgba(0, 0, 0, 0.45);
+}
+
+.customer-menu-card {
+    background-color: #ffffff;
+    border: 1px solid var(--app-border);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.customer-menu-card-name {
+    color: #1a1a1a;
+}
+
+.customer-menu-card-desc {
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.customer-menu-empty,
+.customer-menu-loading {
+    color: rgba(0, 0, 0, 0.45);
+}
+
+.onboarding-title {
+    color: #1a1a1a;
+}
+
+.onboarding-subtitle {
+    color: rgba(0, 0, 0, 0.55);
+}
+
+/* Login screen (matches styles.css layout; reinforce light) */
+.customer-login-screen {
+    background-color: #ffffff;
+}
+
+.customer-login-panel {
+    background-color: #ffffff;
+}
+
+.customer-form-group label {
+    color: #1a1a1a;
+}
+
+.customer-phone-input-wrap {
+    border-color: #e0e0e0;
+    background-color: #fff;
+}
+
+.customer-phone-prefix {
+    background: #f9f9f9;
+    color: #1a1a1a;
+}
+
+.customer-phone-input {
+    color: #1a1a1a;
+    background: #fff;
+}
+
+.customer-login-separator span {
+    color: #999;
+}
+
+.customer-login-link {
+    color: var(--app-accent);
+}
+
+/* Onboarding inside customer layout — inherit light onboarding from styles.css */
+.customer-layout .onboarding-chip {
+    color: #374151;
+}
+
+.customer-layout .onboarding-hint {
+    color: #666;
+}
+
+.customer-layout .onboarding-text-input,
+.customer-layout .onboarding-textarea {
+    background: #fff;
+    border-color: #e5e7eb;
+    color: #1a1a1a;
+}
+
+.customer-layout .onboarding-step-node {
+    background: #e5e7eb;
+}
+
+.customer-layout .onboarding-step-node.done,
+.customer-layout .onboarding-step-node.active {
+    background: var(--app-accent);
+}
+
+.customer-layout .onboarding-step-arrow {
+    color: #d1d5db;
+}
+
+.customer-layout .onboarding-step-arrow.done {
+    color: var(--app-accent);
+}
+
+.customer-collection-row {
+    background: #fff;
+    border: 1px solid var(--app-border);
+    border-radius: 8px;
+}
+
+.customer-order-card {
+    background: #fff;
+    border: 1px solid var(--app-border);
+    border-radius: 8px;
+}
+
+.customer-order-status--complete {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.customer-order-status--preparing {
+    background: rgba(0, 0, 0, 0.04);
+}

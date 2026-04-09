@@ -1,0 +1,1178 @@
+{
+  "schema_version": "velox.v1",
+  "notes": "Recipes are structured for LLM matching against a user taste profile.",
+  "recipes": [
+    {
+      "id": "classic_daiquiri",
+      "name": "Classic Daiquiri",
+      "cocktail_family": "daiquiri",
+      "style": "sour",
+      "base_spirits": [
+        "rum"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "rum"
+        ],
+        "acidifier": [
+          "lime_juice"
+        ],
+        "sweetener": [
+          "simple_syrup"
+        ],
+        "garnish": []
+      },
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 6,
+        "bitterness": 0,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 4,
+        "crisp_dense": 3,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 7,
+        "adventurousness": 4
+      },
+      "aroma_tags": [
+        "lime",
+        "light_molasses"
+      ],
+      "mood_tags": [
+        "bright",
+        "playful"
+      ],
+      "build": {
+        "method": "shake",
+        "glassware": "coupe"
+      },
+      "match_reasons": [
+        "good for low bitterness preferences",
+        "clean rum-lime balance",
+        "classic and approachable"
+      ],
+      "not_recommended_if": {
+        "bitterness_min_above": 7,
+        "dense_preference_min_above": 8
+      },
+      "customization_options": {
+        "sweetness_adjustment": true,
+        "split_base_options": [
+          "rum",
+          "tequila"
+        ]
+      }
+    },
+    {
+      "id": "margarita",
+      "name": "Margarita",
+      "cocktail_family": "daisy",
+      "style": "citrus_forward",
+      "base_spirits": [
+        "tequila"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "tequila"
+        ],
+        "citrus_modifier": [
+          "triple_sec"
+        ],
+        "acidifier": [
+          "lime_juice"
+        ],
+        "garnish": []
+      },
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 6,
+        "bitterness": 1,
+        "saltiness": 0,
+        "umami": 1
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 4,
+        "crisp_dense": 4,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 7,
+        "adventurousness": 4
+      },
+      "aroma_tags": [
+        "agave",
+        "lime",
+        "orange"
+      ],
+      "mood_tags": [
+        "bright",
+        "energetic"
+      ],
+      "build": {
+        "method": "shake",
+        "glassware": "coupe"
+      },
+      "match_reasons": [
+        "works for citrus-driven profiles",
+        "moderate strength",
+        "classic but flavorful"
+      ],
+      "not_recommended_if": {
+        "bitterness_min_above": 7,
+        "flat_preference_max_below": 2
+      },
+      "customization_options": {
+        "fruit_additions": [
+          "pineapple",
+          "passionfruit"
+        ],
+        "split_base_options": [
+          "tequila",
+          "gin"
+        ]
+      }
+    },
+    {
+      "id": "whiskey_sour_honey",
+      "name": "Whiskey Honey Sour",
+      "cocktail_family": "sour",
+      "style": "citrus_forward",
+      "base_spirits": [
+        "whiskey"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "whiskey"
+        ],
+        "acidifier": [
+          "lemon_juice"
+        ],
+        "sweetener": [
+          "honey_syrup"
+        ],
+        "seasoning": [
+          "angostura_bitters"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 5,
+        "bitterness": 2,
+        "saltiness": 0,
+        "umami": 1
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 4,
+        "crisp_dense": 6,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 8,
+        "adventurousness": 4
+      },
+      "aroma_tags": [
+        "oak",
+        "honey",
+        "lemon",
+        "spice"
+      ],
+      "mood_tags": [
+        "comforting",
+        "warm",
+        "nostalgic"
+      ],
+      "build": {
+        "method": "shake",
+        "glassware": "rocks"
+      },
+      "match_reasons": [
+        "fits stronger and denser preferences",
+        "warm woody aroma",
+        "still accessible for non-experts"
+      ],
+      "not_recommended_if": {
+        "creamy_preference_min_above": 7
+      },
+      "customization_options": {
+        "sweetness_adjustment": true
+      }
+    },
+    {
+      "id": "bee_knees_style",
+      "name": "Bee's Knees Style",
+      "cocktail_family": "bee_knees_style",
+      "style": "sour",
+      "base_spirits": [
+        "gin"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "gin"
+        ],
+        "acidifier": [
+          "lemon_juice"
+        ],
+        "sweetener": [
+          "honey_syrup"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 5,
+        "bitterness": 1,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 4,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 7,
+        "adventurousness": 4
+      },
+      "aroma_tags": [
+        "juniper",
+        "honey",
+        "lemon"
+      ],
+      "mood_tags": [
+        "soft",
+        "elegant"
+      ],
+      "build": {
+        "method": "shake",
+        "glassware": "coupe"
+      },
+      "match_reasons": [
+        "good if user wants floral warmth without too much bitterness"
+      ],
+      "not_recommended_if": {
+        "bitterness_min_above": 8
+      },
+      "customization_options": {
+        "sweetness_adjustment": true
+      }
+    },
+    {
+      "id": "negroni",
+      "name": "Negroni",
+      "cocktail_family": "negroni",
+      "style": "spirit_forward",
+      "base_spirits": [
+        "gin"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "gin"
+        ],
+        "bitter_modifier": [
+          "campari"
+        ],
+        "bridging_modifier": [
+          "sweet_vermouth"
+        ],
+        "garnish": []
+      },
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 0,
+        "bitterness": 9,
+        "saltiness": 0,
+        "umami": 1
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 7,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 8,
+        "adventurousness": 6
+      },
+      "aroma_tags": [
+        "orange_peel",
+        "herbal",
+        "earthy"
+      ],
+      "mood_tags": [
+        "serious",
+        "relaxed",
+        "contemplative"
+      ],
+      "build": {
+        "method": "stir",
+        "glassware": "rocks"
+      },
+      "match_reasons": [
+        "excellent for high bitterness",
+        "non-sparkling and dense",
+        "earthy-herbal profile"
+      ],
+      "not_recommended_if": {
+        "sweetness_min_above": 8,
+        "sparkling_preference_min_above": 7
+      },
+      "customization_options": {
+        "base_swaps": [
+          "whiskey",
+          "tequila",
+          "rum"
+        ]
+      }
+    },
+    {
+      "id": "boulevardier",
+      "name": "Boulevardier",
+      "cocktail_family": "negroni_variant",
+      "style": "spirit_forward",
+      "base_spirits": [
+        "whiskey"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "whiskey"
+        ],
+        "bitter_modifier": [
+          "campari"
+        ],
+        "bridging_modifier": [
+          "sweet_vermouth"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 0,
+        "bitterness": 8,
+        "saltiness": 0,
+        "umami": 2
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 8,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 9,
+        "adventurousness": 5
+      },
+      "aroma_tags": [
+        "oak",
+        "orange_peel",
+        "earthy",
+        "spice"
+      ],
+      "mood_tags": [
+        "nostalgic",
+        "serious",
+        "warm"
+      ],
+      "build": {
+        "method": "stir",
+        "glassware": "rocks"
+      },
+      "match_reasons": [
+        "great for woody, dense, strong preferences",
+        "bitter but softened by vermouth",
+        "classic spirit-forward fit"
+      ],
+      "not_recommended_if": {
+        "sparkling_preference_min_above": 7,
+        "strength_max_below": 4
+      },
+      "customization_options": {
+        "base_swaps": [
+          "rum",
+          "tequila"
+        ]
+      }
+    },
+    {
+      "id": "manhattan",
+      "name": "Manhattan",
+      "cocktail_family": "manhattan",
+      "style": "spirit_forward",
+      "base_spirits": [
+        "whiskey"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "whiskey"
+        ],
+        "bridging_modifier": [
+          "sweet_vermouth"
+        ],
+        "seasoning": [
+          "angostura_bitters"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 2,
+        "sourness": 0,
+        "bitterness": 4,
+        "saltiness": 0,
+        "umami": 2
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 8,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 9,
+        "adventurousness": 4
+      },
+      "aroma_tags": [
+        "woody",
+        "spice",
+        "earthy"
+      ],
+      "mood_tags": [
+        "nostalgic",
+        "relaxed",
+        "classic"
+      ],
+      "build": {
+        "method": "stir",
+        "glassware": "coupe"
+      },
+      "match_reasons": [
+        "strong and dense",
+        "excellent for woody aroma preferences",
+        "classic and contemplative"
+      ],
+      "not_recommended_if": {
+        "sourness_min_above": 7,
+        "sparkling_preference_min_above": 6
+      },
+      "customization_options": {
+        "base_swaps": [
+          "gin",
+          "rum"
+        ]
+      }
+    },
+    {
+      "id": "dry_martini",
+      "name": "Dry Martini",
+      "cocktail_family": "martini",
+      "style": "spirit_forward",
+      "base_spirits": [
+        "gin"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "gin"
+        ],
+        "bridging_modifier": [
+          "dry_vermouth"
+        ],
+        "seasoning": [
+          "orange_bitters"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 0,
+        "sourness": 0,
+        "bitterness": 3,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 6,
+        "crisp_dense": 6,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 9,
+        "adventurousness": 4
+      },
+      "aroma_tags": [
+        "juniper",
+        "dry_herbal",
+        "citrus_peel"
+      ],
+      "mood_tags": [
+        "minimal",
+        "elegant",
+        "serious"
+      ],
+      "build": {
+        "method": "stir",
+        "glassware": "martini"
+      },
+      "match_reasons": [
+        "good for users who want dry and spirit-forward",
+        "clean and aromatic without sweetness"
+      ],
+      "not_recommended_if": {
+        "sweetness_min_above": 6,
+        "bitterness_min_above": 8
+      },
+      "customization_options": {
+        "base_swaps": [
+          "vodka"
+        ]
+      }
+    },
+    {
+      "id": "gin_tonic",
+      "name": "Gin & Tonic",
+      "cocktail_family": "highball",
+      "style": "sparkling",
+      "base_spirits": [
+        "gin"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "gin"
+        ],
+        "carbonation": [
+          "tonic_water"
+        ],
+        "brightener": [
+          "lime_juice"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 1,
+        "sourness": 2,
+        "bitterness": 4,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 2,
+        "flat_sparkling": 9,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 5,
+        "adventurousness": 3
+      },
+      "aroma_tags": [
+        "juniper",
+        "quinine",
+        "lime"
+      ],
+      "mood_tags": [
+        "refreshing",
+        "social"
+      ],
+      "build": {
+        "method": "build",
+        "glassware": "highball"
+      },
+      "match_reasons": [
+        "good for sparkling and light preferences",
+        "easygoing and approachable"
+      ],
+      "not_recommended_if": {
+        "flat_preference_max_below": 5,
+        "dense_preference_min_above": 7
+      },
+      "customization_options": {
+        "base_swaps": [
+          "vodka",
+          "tequila"
+        ]
+      }
+    },
+    {
+      "id": "elderflower_spritz",
+      "name": "Gin Elderflower Spritz",
+      "cocktail_family": "spritz",
+      "style": "sparkling",
+      "base_spirits": [
+        "gin"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "gin"
+        ],
+        "floral_modifier": [
+          "elderflower_liqueur"
+        ],
+        "carbonation": [
+          "soda_water"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 0,
+        "bitterness": 1,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 2,
+        "flat_sparkling": 9,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 4,
+        "adventurousness": 4
+      },
+      "aroma_tags": [
+        "floral",
+        "juniper",
+        "fresh"
+      ],
+      "mood_tags": [
+        "romantic",
+        "light",
+        "playful"
+      ],
+      "build": {
+        "method": "build",
+        "glassware": "wine_glass"
+      },
+      "match_reasons": [
+        "nice for floral and lower-strength preferences",
+        "easygoing and social"
+      ],
+      "not_recommended_if": {
+        "bitterness_min_above": 7,
+        "flat_preference_max_below": 5,
+        "strength_min_above": 8
+      },
+      "customization_options": {
+        "base_swaps": [
+          "vodka"
+        ]
+      }
+    },
+    {
+      "id": "passionfruit_cooler",
+      "name": "Passionfruit Mint Cooler",
+      "cocktail_family": "cooler",
+      "style": "sparkling",
+      "base_spirits": [
+        "rum"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "rum"
+        ],
+        "fruit_modifier": [
+          "passionfruit"
+        ],
+        "aromatic_modifier": [
+          "mint"
+        ],
+        "carbonation": [
+          "soda_water"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 3,
+        "bitterness": 0,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 4,
+        "crisp_dense": 3,
+        "flat_sparkling": 8,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 4,
+        "adventurousness": 5
+      },
+      "aroma_tags": [
+        "tropical",
+        "mint",
+        "bright"
+      ],
+      "mood_tags": [
+        "playful",
+        "fun",
+        "outgoing"
+      ],
+      "build": {
+        "method": "build",
+        "glassware": "highball"
+      },
+      "match_reasons": [
+        "good for refreshing tropical profiles"
+      ],
+      "not_recommended_if": {
+        "bitterness_min_above": 6,
+        "dense_preference_min_above": 7
+      },
+      "customization_options": {
+        "base_swaps": [
+          "gin",
+          "vodka"
+        ]
+      }
+    },
+    {
+      "id": "pineapple_margarita",
+      "name": "Pineapple Margarita",
+      "cocktail_family": "tropical_daisy",
+      "style": "citrus_forward",
+      "base_spirits": [
+        "tequila"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "tequila"
+        ],
+        "citrus_modifier": [
+          "triple_sec"
+        ],
+        "acidifier": [
+          "lime_juice"
+        ],
+        "fruit_modifier": [
+          "pineapple"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 4,
+        "sourness": 5,
+        "bitterness": 1,
+        "saltiness": 0,
+        "umami": 1
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 4,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 6,
+        "adventurousness": 5
+      },
+      "aroma_tags": [
+        "agave",
+        "pineapple",
+        "orange"
+      ],
+      "mood_tags": [
+        "sunny",
+        "festive"
+      ],
+      "build": {
+        "method": "shake",
+        "glassware": "rocks"
+      },
+      "match_reasons": [
+        "good for tropical citrus seekers",
+        "still anchored by a classic margarita structure"
+      ],
+      "not_recommended_if": {
+        "bitterness_min_above": 7,
+        "dense_preference_min_above": 8
+      },
+      "customization_options": {
+        "fruit_swaps": [
+          "passionfruit"
+        ]
+      }
+    },
+    {
+      "id": "coconut_pineapple_rum",
+      "name": "Coconut Pineapple Rum",
+      "cocktail_family": "creamy_tropical",
+      "style": "creamy",
+      "base_spirits": [
+        "rum"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "rum"
+        ],
+        "texture_modifier": [
+          "coconut_cream"
+        ],
+        "fruit_modifier": [
+          "pineapple"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 5,
+        "sourness": 1,
+        "bitterness": 0,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 8,
+        "crisp_dense": 7,
+        "flat_sparkling": 1,
+        "clear_creamy": 9
+      },
+      "experience_profile": {
+        "strength": 5,
+        "adventurousness": 4
+      },
+      "aroma_tags": [
+        "coconut",
+        "tropical",
+        "sweet"
+      ],
+      "mood_tags": [
+        "vacation",
+        "indulgent"
+      ],
+      "build": {
+        "method": "shake",
+        "glassware": "hurricane"
+      },
+      "match_reasons": [
+        "works for creamy, sweet tropical preferences"
+      ],
+      "not_recommended_if": {
+        "bitterness_min_above": 5,
+        "clear_preference_max_below": 4
+      },
+      "customization_options": {
+        "base_swaps": [
+          "vodka"
+        ]
+      }
+    },
+    {
+      "id": "tequila_negroni",
+      "name": "Tequila Negroni",
+      "cocktail_family": "negroni_variant",
+      "style": "spirit_forward",
+      "base_spirits": [
+        "tequila"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "tequila"
+        ],
+        "bitter_modifier": [
+          "campari"
+        ],
+        "bridging_modifier": [
+          "sweet_vermouth"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 0,
+        "bitterness": 8,
+        "saltiness": 0,
+        "umami": 2
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 7,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 8,
+        "adventurousness": 7
+      },
+      "aroma_tags": [
+        "earthy",
+        "orange_peel",
+        "herbal"
+      ],
+      "mood_tags": [
+        "bold",
+        "creative",
+        "serious"
+      ],
+      "build": {
+        "method": "stir",
+        "glassware": "rocks"
+      },
+      "match_reasons": [
+        "excellent for bitter + earthy seekers",
+        "more experimental than a classic Negroni"
+      ],
+      "not_recommended_if": {
+        "sweetness_min_above": 7,
+        "sparkling_preference_min_above": 7
+      },
+      "customization_options": {}
+    },
+    {
+      "id": "rum_manhattan",
+      "name": "Rum Manhattan",
+      "cocktail_family": "manhattan_variant",
+      "style": "spirit_forward",
+      "base_spirits": [
+        "rum"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "rum"
+        ],
+        "bridging_modifier": [
+          "sweet_vermouth"
+        ],
+        "seasoning": [
+          "angostura_bitters"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 0,
+        "bitterness": 4,
+        "saltiness": 0,
+        "umami": 1
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 7,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 8,
+        "adventurousness": 6
+      },
+      "aroma_tags": [
+        "molasses",
+        "spice",
+        "earthy"
+      ],
+      "mood_tags": [
+        "warm",
+        "nostalgic",
+        "curious"
+      ],
+      "build": {
+        "method": "stir",
+        "glassware": "coupe"
+      },
+      "match_reasons": [
+        "good for users who like dense classic drinks but want a twist"
+      ],
+      "not_recommended_if": {
+        "sourness_min_above": 7,
+        "sparkling_preference_min_above": 6
+      },
+      "customization_options": {}
+    },
+    {
+      "id": "split_base_margarita",
+      "name": "Split-Base Margarita",
+      "cocktail_family": "daisy",
+      "style": "citrus_forward",
+      "base_spirits": [
+        "tequila",
+        "gin"
+      ],
+      "split_base_allowed": true,
+      "components": {
+        "base": [
+          "tequila",
+          "gin"
+        ],
+        "citrus_modifier": [
+          "triple_sec"
+        ],
+        "acidifier": [
+          "lime_juice"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 6,
+        "bitterness": 2,
+        "saltiness": 0,
+        "umami": 1
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 4,
+        "crisp_dense": 4,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 8,
+        "adventurousness": 7
+      },
+      "aroma_tags": [
+        "agave",
+        "juniper",
+        "lime",
+        "orange"
+      ],
+      "mood_tags": [
+        "creative",
+        "bright"
+      ],
+      "build": {
+        "method": "shake",
+        "glassware": "coupe"
+      },
+      "match_reasons": [
+        "fits adventurous drinkers",
+        "keeps classic margarita balance with added herbal complexity"
+      ],
+      "not_recommended_if": {
+        "bitterness_min_above": 8,
+        "dense_preference_min_above": 8
+      },
+      "customization_options": {}
+    },
+    {
+      "id": "split_base_boulevardier",
+      "name": "Split-Base Boulevardier",
+      "cocktail_family": "negroni_variant",
+      "style": "spirit_forward",
+      "base_spirits": [
+        "whiskey",
+        "rum"
+      ],
+      "split_base_allowed": true,
+      "components": {
+        "base": [
+          "whiskey",
+          "rum"
+        ],
+        "bitter_modifier": [
+          "campari"
+        ],
+        "bridging_modifier": [
+          "sweet_vermouth"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 0,
+        "bitterness": 8,
+        "saltiness": 0,
+        "umami": 2
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 8,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 9,
+        "adventurousness": 7
+      },
+      "aroma_tags": [
+        "oak",
+        "molasses",
+        "orange_peel",
+        "earthy"
+      ],
+      "mood_tags": [
+        "nostalgic",
+        "bold",
+        "relaxed"
+      ],
+      "build": {
+        "method": "stir",
+        "glassware": "rocks"
+      },
+      "match_reasons": [
+        "great for strong dense profiles",
+        "more layered than a standard Boulevardier",
+        "good for adventurous bitters lovers"
+      ],
+      "not_recommended_if": {
+        "sparkling_preference_min_above": 7,
+        "strength_max_below": 4
+      },
+      "customization_options": {}
+    },
+    {
+      "id": "gin_elderflower_sour",
+      "name": "Gin Elderflower Sour",
+      "cocktail_family": "floral_sour",
+      "style": "sour",
+      "base_spirits": [
+        "gin"
+      ],
+      "split_base_allowed": false,
+      "components": {
+        "base": [
+          "gin"
+        ],
+        "floral_modifier": [
+          "elderflower_liqueur"
+        ],
+        "acidifier": [
+          "lemon_juice"
+        ]
+      },
+      "taste_profile": {
+        "sweetness": 3,
+        "sourness": 5,
+        "bitterness": 1,
+        "saltiness": 0,
+        "umami": 0
+      },
+      "mouthfeel_profile": {
+        "rough_smooth": 5,
+        "crisp_dense": 3,
+        "flat_sparkling": 1,
+        "clear_creamy": 1
+      },
+      "experience_profile": {
+        "strength": 6,
+        "adventurousness": 5
+      },
+      "aroma_tags": [
+        "floral",
+        "juniper",
+        "lemon"
+      ],
+      "mood_tags": [
+        "soft",
+        "playful"
+      ],
+      "build": {
+        "method": "shake",
+        "glassware": "coupe"
+      },
+      "match_reasons": [
+        "nice for floral aromatic preferences",
+        "balanced and approachable"
+      ],
+      "not_recommended_if": {
+        "bitterness_min_above": 7,
+        "dense_preference_min_above": 8
+      },
+      "customization_options": {}
+    }
+  ]
+}

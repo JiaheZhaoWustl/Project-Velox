@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+
+# Build output
+/dist
+/build
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Runtime / generated data / non-source artifacts
+archived_files/
+pencil/
+generated-images/
+userUploads/
+userInputs/tasteProfiles/*.json
+data/gpt_recommendation_log.jsonl
+data/customers.json
+
+# Leftover from previous structure (safe to delete after IDE restart)
+/cocktail-app/
+
+# Non-application directories (course materials, experiments)
+/Archived/
+/Experiments/
+/SP26/
+
+# Testing
+/coverage
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

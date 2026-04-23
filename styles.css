@@ -4658,41 +4658,103 @@ a.publish-checklist-label:hover {
 }
 
 @media (max-width: 1024px) {
+  .customer-login-screen {
+    align-items: stretch;
+  }
+
   .customer-login-container {
     flex-direction: column;
+    min-height: auto;
   }
 
   .customer-login-panel {
-    flex: 1;
-    padding: 40px 32px;
+    flex: 0 0 auto;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 28px 24px 20px;
+    overflow-y: visible;
   }
 
   .customer-login-visual {
-    min-height: 280px;
+    min-height: 180px;
+    padding: 8px 24px 24px;
+  }
+
+  .customer-login-cover {
+    max-width: min(420px, 92vw);
+    max-height: none;
+    width: 100%;
+    height: auto;
   }
 }
 
 @media (max-width: 768px) {
+  .customer-login-container {
+    min-height: 100dvh;
+  }
+
   .customer-login-panel {
-    padding: 32px 24px;
+    padding: 20px 16px 14px;
+  }
+
+  .customer-login-content {
+    max-width: none;
   }
 
   .customer-welcome-title {
-    font-size: 20px;
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+  }
+
+  .customer-welcome-subtitle {
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+
+  .customer-login-form {
+    margin-bottom: 14px;
+  }
+
+  .customer-form-group {
+    margin-bottom: 12px;
+  }
+
+  .customer-login-separator {
+    margin: 12px 0;
   }
 
   .customer-phone-input-wrap {
-    flex-direction: column;
+    flex-direction: row;
   }
 
   .customer-phone-prefix {
-    border-bottom: 1px solid #e0e0e0;
-    padding-right: 12px;
-    background-image: none;
+    border-bottom: none;
+    width: 96px;
+    flex: 0 0 96px;
+    padding: 12px 10px;
+    font-size: 0.92rem;
+    background-position: right 8px center;
+    padding-right: 24px;
   }
 
   .customer-phone-input {
-    border-left: none;
+    border-left: 1px solid #e0e0e0;
+    font-size: 16px;
+    padding: 12px 12px;
+  }
+
+  .customer-btn-continue,
+  .customer-btn-guest {
+    min-height: 42px;
+  }
+
+  .customer-login-visual {
+    min-height: 132px;
+    padding: 6px 16px 18px;
+  }
+
+  .customer-login-cover {
+    max-width: min(300px, 88vw);
   }
 }
 
@@ -7178,5 +7240,235 @@ a.publish-checklist-label:hover {
         transform: scale(0.55);
         transform-origin: top center;
         margin-bottom: -395px;
+    }
+}
+
+/* Mobile-first layout hardening across staff + customer surfaces */
+@media (max-width: 900px) {
+    .main-screen,
+    .main-screen--hf {
+        flex-direction: column;
+        height: auto;
+        min-height: 100dvh;
+        overflow: visible;
+    }
+
+    .app-sidebar,
+    .app-sidebar--hf {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--hf-border, rgba(0, 0, 0, 0.08));
+    }
+
+    .sidebar-brand {
+        padding: 14px 16px 10px;
+    }
+
+    .sidebar-nav {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        padding: 10px 12px 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: thin;
+    }
+
+    .sidebar-link--hf,
+    .sidebar-link {
+        white-space: nowrap;
+        min-height: 42px;
+        padding: 10px 14px;
+        font-size: 14px;
+        border-radius: 999px;
+        flex: 0 0 auto;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+
+    .app-main {
+        overflow: visible;
+    }
+
+    .app-header--hf,
+    .app-header {
+        height: auto;
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .header-search-wrap {
+        order: 2;
+        width: 100%;
+        max-width: none;
+    }
+
+    .search-input--hf,
+    .search-input {
+        width: 100%;
+        font-size: 16px;
+    }
+
+    .header-actions {
+        margin-left: auto;
+    }
+
+    .header-notifications-dropdown {
+        right: 0;
+        left: auto;
+        width: min(92vw, 320px);
+    }
+
+    .app-content--hf,
+    .app-content {
+        padding: 16px;
+    }
+
+    .customer-main {
+        padding: 16px;
+    }
+
+    .customer-header--nav {
+        gap: 12px;
+        padding: 12px 14px;
+    }
+
+    .customer-header-left {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .customer-header-right {
+        width: 100%;
+        margin-left: 0;
+        justify-content: space-between;
+    }
+
+    .customer-nav {
+        width: 100%;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 2px;
+    }
+
+    .customer-nav-link {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .customer-menu-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 2px;
+    }
+
+    .customer-menu-tab {
+        white-space: nowrap;
+        flex: 0 0 auto;
+    }
+
+    .customer-menu-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .customer-menu-modal-backdrop {
+        padding: 10px;
+        align-items: flex-end;
+    }
+
+    .customer-menu-modal {
+        max-width: 100%;
+        max-height: 88dvh;
+    }
+
+    .customer-menu-modal-content {
+        padding: 16px;
+    }
+
+    .customer-order-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .customer-order-actions {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .customer-order-demo-btn,
+    .customer-order-clear-btn,
+    .customer-order-cancel-btn,
+    .customer-collection-remove {
+        min-height: 42px;
+    }
+
+    .customer-taste-profile.synesthesia-minimal {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 8px 0 20px;
+    }
+
+    .customer-taste-profile.synesthesia-minimal .taste-profile-card,
+    .customer-taste-profile.synesthesia-minimal .taste-profile-right {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .customer-taste-profile.synesthesia-minimal .taste-profile-actions {
+        flex-direction: column;
+    }
+
+    .customer-taste-profile.synesthesia-minimal .tp-btn {
+        width: 100%;
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 560px) {
+    .sidebar-brand-text,
+    .customer-brand-text {
+        font-size: 16px;
+    }
+
+    .app-content--hf,
+    .app-content,
+    .customer-main {
+        padding: 12px;
+    }
+
+    .customer-lang-btn,
+    .customer-logout-btn {
+        min-height: 40px;
+        font-size: 13px;
+    }
+
+    .customer-menu-card {
+        padding: 12px;
+    }
+
+    .customer-menu-card-name,
+    .customer-menu-card-price {
+        font-size: 15px;
+    }
+
+    .customer-order-card {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .customer-page-title {
+        font-size: 20px;
+        margin-bottom: 14px;
     }
 }

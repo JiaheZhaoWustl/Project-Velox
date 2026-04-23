@@ -108,16 +108,11 @@ function CustomerMenu() {
     setOrderLoading(true)
     try {
       const price = typeof selectedItem.price === 'number' ? selectedItem.price : 0
-      const data = await customerApi.placeOrder({
+      await customerApi.placeOrder({
         name: selectedItem.name,
         price,
         section: selectedItem.section || '',
       })
-      const num = data.order?.orderNumber || ''
-      const msg = data?.notRecorded
-        ? (data.message || 'Mobile preview only. Not added to order history.')
-        : (num ? `Order placed — ${num}` : 'Order placed.')
-      setOrderMsg(msg)
       setTimeout(() => closeModal(), 1400)
     } catch (e) {
       setOrderMsg(e.message || 'Could not place order')

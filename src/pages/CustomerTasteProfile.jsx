@@ -354,9 +354,29 @@ function CustomerTasteProfile() {
         .replace(/[^a-z0-9]+/gi, '-')
         .replace(/^-+|-+$/g, '')
         .toLowerCase()
+      const fileName = `${safeName || 'cocktail'}-2x3-card.png`
+
+      // On mobile-capable browsers, open native share sheet so users can
+      // "Save Image" directly into their photo album.
+      try {
+        if (navigator?.share && navigator?.canShare) {
+          const blob = await (await fetch(dataUrl)).blob()
+          const file = new File([blob], fileName, { type: 'image/png' })
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              title: displayCocktail.name || 'Cocktail card',
+              files: [file],
+            })
+            return
+          }
+        }
+      } catch {
+        // Ignore share cancellation/errors and fall back to regular download.
+      }
+
       const anchor = document.createElement('a')
       anchor.href = dataUrl
-      anchor.download = `${safeName || 'cocktail'}-2x3-card.png`
+      anchor.download = fileName
       anchor.click()
     } catch (error) {
       setOrderMsg(error.message || 'Could not generate PNG')

@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "ordersByPhone": {
+    "1": [
+      {
+        "id": "ord_50fe63bf7296f1bc",
+        "orderNumber": "VX-51231",
+        "status": "Preparing",
+        "currency": "USD",
+        "summary": "Plum Glow (recommendation)",
+        "createdAt": "2026-04-23T07:54:28.086Z",
+        "items": [
+          {
+            "name": "Plum Glow",
+            "qty": 1,
+            "price": 0,
+            "ingredients": [
+              "90 ml Suanmeitang (Sour Plum Drink)",
+              "15 ml Osmanthus Honey Syrup (House-made)",
+              "45 ml Sparkling Mineral Water",
+              "2 dashes Saline Solution (House-made)",
+              "pinch Dried Osmanthus Flowers (garnish)",
+              "Rock Ice (Cubed)"
+            ]
+          }
+        ],
+        "total": 0,
+        "fullAmount": 0
+      },
+      {
+        "id": "ord_165ea5c10459731f",
+        "orderNumber": "VX-58984",
+        "status": "Preparing",
+        "currency": "USD",
+        "summary": "Daiquiri (recommendation)",
+        "createdAt": "2026-04-23T07:53:55.481Z",
+        "items": [
+          {
+            "name": "Daiquiri",
+            "qty": 1,
+            "price": 0,
+            "ingredients": [
+              "60 ml white rum",
+              "30 ml fresh lime juice",
+              "22.5 ml simple syrup"
+            ]
+          }
+        ],
+        "total": 0,
+        "fullAmount": 0
+      }
+    ]
+  }
+}

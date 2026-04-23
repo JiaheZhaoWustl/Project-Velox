@@ -72,7 +72,7 @@ function createApp() {
 
     // If client passes only profile_id (onboarding flow), resolve the stored profile.
     if (profileId && (!customerProfile || Object.keys(customerProfile).length === 0)) {
-      const stored = getTasteProfileById(profileId)
+      const stored = await getTasteProfileById(profileId)
       if (stored) customerProfile = stored
     }
 
@@ -90,7 +90,8 @@ function createApp() {
 
     const phoneRaw = req.headers['x-customer-phone'] || req.headers['x-customer-phone-key']
     const phoneKey = customerStore.normalizePhone(phoneRaw)
-    const orderHistory = phoneKey ? (customerStore.getAccount(phoneKey)?.orders || []) : []
+    const account = phoneKey ? await customerStore.getAccount(phoneKey) : null
+    const orderHistory = account?.orders || []
     const { recommendations } = await getRecommendations(customerProfile, process.env.OPENAI_API_KEY, {
       orderHistory,
     })
@@ -105,8 +106,10 @@ function createApp() {
 
   // Serve generated cocktail images (ensure directory exists for express.static)
   const fs = require('fs')
-  fs.mkdirSync(GENERATED_IMAGES_DIR, { recursive: true })
-  app.use('/api/generated-images', express.static(GENERATED_IMAGES_DIR))
+  if (process.env.VERCEL !== '1') {
+    fs.mkdirSync(GENERATED_IMAGES_DIR, { recursive: true })
+    app.use('/api/generated-images', express.static(GENERATED_IMAGES_DIR))
+  }
 
   // POST /api/cocktail-image — generate a cocktail image via DALL-E
   app.post('/api/cocktail-image', async (req, res) => {
@@ -115,11 +118,14 @@ function createApp() {
     if (!cocktailName) {
       return res.status(400).json({ success: false, error: 'cocktailName is required' })
     }
-    const { filename } = await generateCocktailImage(
+    const { filename, filepath } = await generateCocktailImage(
       { cocktailName, glassware, drinkColor },
       process.env.OPENAI_API_KEY
     )
-    res.json({ success: true, imageUrl: `/api/generated-images/${filename}` })
+    const imageUrl = /^https?:\/\//i.test(String(filepath || ''))
+      ? filepath
+      : `/api/generated-images/${filename}`
+    res.json({ success: true, imageUrl })
   } catch (err) {
     console.error('[GPT-Image] Failed:', err.message)
     const status = err.status || 500

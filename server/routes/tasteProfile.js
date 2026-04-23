@@ -2,6 +2,16 @@ const path = require('path')
 const fs = require('fs')
 const router = require('express').Router()
 const { TASTE_PROFILES_DIR } = require('../config/paths')
+const hasKv = Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN)
+const KV_INDEX_KEY = 'velox:taste:index'
+const KV_PROFILE_PREFIX = 'velox:taste:profile:'
+
+let kvClient = null
+function getKv() {
+  if (!hasKv) return null
+  if (!kvClient) kvClient = require('@vercel/kv').kv
+  return kvClient
+}
 
 function ensureTasteProfilesDir() {
   if (!fs.existsSync(TASTE_PROFILES_DIR)) {
@@ -29,6 +39,8 @@ function listTasteProfileFiles() {
 function getTasteProfileById(profileId) {
   const safeId = String(profileId).replace(/[^a-zA-Z0-9_-]/g, '')
   if (!safeId) return null
+  const kv = getKv()
+  if (kv) return kv.get(`${KV_PROFILE_PREFIX}${safeId}`)
   const filePath = path.join(TASTE_PROFILES_DIR, `${safeId}.json`)
   if (!fs.existsSync(filePath)) return null
   try {
@@ -39,16 +51,23 @@ function getTasteProfileById(profileId) {
   }
 }
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    ensureTasteProfilesDir()
     const profile = req.body?.customer_taste_profile ?? req.body
     if (!profile || typeof profile !== 'object') {
       return res.status(400).json({ success: false, error: 'Invalid taste profile' })
     }
     const id = `profile_${Date.now()}`
-    const filePath = path.join(TASTE_PROFILES_DIR, `${id}.json`)
     const toSave = { id, createdAt: new Date().toISOString(), ...profile }
+    const kv = getKv()
+    if (kv) {
+      await kv.set(`${KV_PROFILE_PREFIX}${id}`, toSave)
+      const index = (await kv.get(KV_INDEX_KEY)) || []
+      await kv.set(KV_INDEX_KEY, [{ id, name: `${id}.json`, mtime: Date.now() }, ...index].slice(0, 500))
+      return res.json({ success: true, id })
+    }
+    ensureTasteProfilesDir()
+    const filePath = path.join(TASTE_PROFILES_DIR, `${id}.json`)
     fs.writeFileSync(filePath, JSON.stringify(toSave, null, 2), 'utf-8')
     res.json({ success: true, id, path: filePath })
   } catch (err) {
@@ -57,8 +76,13 @@ router.post('/', (req, res) => {
   }
 })
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
+    const kv = getKv()
+    if (kv) {
+      const profiles = (await kv.get(KV_INDEX_KEY)) || []
+      return res.json({ success: true, profiles })
+    }
     const files = listTasteProfileFiles()
     res.json({ success: true, profiles: files })
   } catch (err) {
@@ -67,13 +91,20 @@ router.get('/', (req, res) => {
   }
 })
 
-router.get('/latest', (req, res) => {
+router.get('/latest', async (req, res) => {
   try {
+    const kv = getKv()
+    if (kv) {
+      const profiles = (await kv.get(KV_INDEX_KEY)) || []
+      if (profiles.length === 0) return res.json({ success: true, profile: null })
+      const latest = await getTasteProfileById(profiles[0].id)
+      return res.json({ success: true, profile: latest || null })
+    }
     const files = listTasteProfileFiles()
     if (files.length === 0) {
       return res.json({ success: true, profile: null })
     }
-    const latest = getTasteProfileById(files[0].id)
+    const latest = await getTasteProfileById(files[0].id)
     res.json({ success: true, profile: latest })
   } catch (err) {
     console.error('GET /api/taste-profile/latest error:', err)
@@ -81,9 +112,9 @@ router.get('/latest', (req, res) => {
   }
 })
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const profile = getTasteProfileById(req.params.id)
+    const profile = await getTasteProfileById(req.params.id)
     if (!profile) {
       return res.status(404).json({ success: false, error: 'Profile not found' })
     }

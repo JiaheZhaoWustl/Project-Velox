@@ -4,10 +4,25 @@ const { SALES_MAX_ENTRIES } = require('../config/paths')
 const { getXlsxFilesInUserUploads, resolveSalesFile } = require('../utils/fileResolution')
 const { normalizeSalesRow } = require('../utils/excelParser')
 const { serveFile } = require('../utils/fileServe')
+const { fetchBufferFromUrl } = require('../utils/remoteFiles')
 
 let cachedSales = null
 
-function readSalesFromSpreadsheet() {
+async function readSalesFromSpreadsheet() {
+  const remoteUrl = String(process.env.SALES_FILE_URL || '').trim()
+  if (remoteUrl) {
+    const content = await fetchBufferFromUrl(remoteUrl)
+    const workbook = XLSX.read(content, { type: 'buffer' })
+    const sheetName = workbook.SheetNames[0]
+    const sheet = workbook.Sheets[sheetName]
+    const rawRows = XLSX.utils.sheet_to_json(sheet, { defval: '' })
+    const columns = rawRows.length > 0 ? Object.keys(rawRows[0]) : []
+    const items = rawRows
+      .slice(0, SALES_MAX_ENTRIES)
+      .map((row, i) => normalizeSalesRow(row, i))
+      .filter((item) => item.orderId && item.orderId !== '—')
+    return { items, total: items.length, sourceFile: remoteUrl, columns }
+  }
   const resolved = resolveSalesFile()
   if (!resolved) return { items: [], total: 0, sourceFile: null, columns: [] }
 
@@ -25,15 +40,15 @@ function readSalesFromSpreadsheet() {
   return { items, total: items.length, sourceFile: resolved.name, columns }
 }
 
-function getSales() {
+async function getSales() {
   if (cachedSales) return cachedSales
-  cachedSales = readSalesFromSpreadsheet()
+  cachedSales = await readSalesFromSpreadsheet()
   return cachedSales
 }
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const { items, total, columns } = getSales()
+    const { items, total, columns } = await getSales()
     const page = Math.max(1, parseInt(req.query.page, 10) || 1)
     const pageSize = Math.min(50, Math.max(1, parseInt(req.query.pageSize, 10) || 8))
     const search = (req.query.search || '').trim().toLowerCase()
@@ -89,10 +104,10 @@ router.get('/', (req, res) => {
   }
 })
 
-router.post('/reload', (req, res) => {
+router.post('/reload', async (req, res) => {
   try {
     cachedSales = null
-    getSales()
+    await getSales()
     res.json({ success: true })
   } catch (err) {
     console.error('POST /api/sales/reload error:', err)
@@ -102,6 +117,13 @@ router.post('/reload', (req, res) => {
 
 router.get('/files', (req, res) => {
   try {
+    const remoteUrl = String(process.env.SALES_FILE_URL || '').trim()
+    if (remoteUrl) {
+      return res.json({
+        success: true,
+        files: [{ name: 'sales.xlsx (remote)', url: remoteUrl }],
+      })
+    }
     const files = getXlsxFilesInUserUploads()
     const resolved = resolveSalesFile()
     const fileList = resolved

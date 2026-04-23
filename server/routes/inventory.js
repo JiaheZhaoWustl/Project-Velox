@@ -5,10 +5,27 @@ const { USER_UPLOADS } = require('../config/paths')
 const { getXlsxFilesInUserUploads, resolveInventoryFile } = require('../utils/fileResolution')
 const { normalizeRow } = require('../utils/excelParser')
 const { serveFile } = require('../utils/fileServe')
+const { fetchBufferFromUrl } = require('../utils/remoteFiles')
 
 let cachedInventory = null
 
-function readInventoryFromSpreadsheet() {
+async function readInventoryFromSpreadsheet() {
+  const remoteUrl = String(process.env.INVENTORY_FILE_URL || '').trim()
+  if (remoteUrl) {
+    const content = await fetchBufferFromUrl(remoteUrl)
+    const workbook = XLSX.read(content, { type: 'buffer' })
+    const sheetName = workbook.SheetNames.find((n) => n === 'Inventory') ||
+      workbook.SheetNames.find((n) => /^inventory$/i.test(n)) ||
+      workbook.SheetNames.find((n) => /inventory|ingredients|stock/i.test(n)) ||
+      workbook.SheetNames[0]
+    const sheet = workbook.Sheets[sheetName]
+    const rawRows = XLSX.utils.sheet_to_json(sheet, { defval: '' })
+    const columns = rawRows.length > 0 ? Object.keys(rawRows[0]) : []
+    const items = rawRows
+      .map((row, i) => normalizeRow(row, i))
+      .filter((item) => item.name && item.name !== '—')
+    return { items, total: items.length, sourceFile: remoteUrl, columns }
+  }
   const resolved = resolveInventoryFile()
   if (!resolved) return { items: [], total: 0, sourceFile: null, columns: [] }
 
@@ -29,15 +46,15 @@ function readInventoryFromSpreadsheet() {
   return { items, total: items.length, sourceFile: resolved.name, columns }
 }
 
-function getInventory() {
+async function getInventory() {
   if (cachedInventory) return cachedInventory
-  cachedInventory = readInventoryFromSpreadsheet()
+  cachedInventory = await readInventoryFromSpreadsheet()
   return cachedInventory
 }
 
-router.get('/columns', (req, res) => {
+router.get('/columns', async (req, res) => {
   try {
-    const { columns } = getInventory()
+    const { columns } = await getInventory()
     res.json({ success: true, columns: columns || [] })
   } catch (err) {
     console.error('GET /api/inventory/columns error:', err)
@@ -45,9 +62,9 @@ router.get('/columns', (req, res) => {
   }
 })
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const { items, total, columns } = getInventory()
+    const { items, total, columns } = await getInventory()
     const page = Math.max(1, parseInt(req.query.page, 10) || 1)
     const pageSize = Math.min(50, Math.max(1, parseInt(req.query.pageSize, 10) || 8))
     const search = (req.query.search || '').trim().toLowerCase()
@@ -90,10 +107,10 @@ router.get('/', (req, res) => {
   }
 })
 
-router.post('/reload', (req, res) => {
+router.post('/reload', async (req, res) => {
   try {
     cachedInventory = null
-    getInventory()
+    await getInventory()
     res.json({ success: true })
   } catch (err) {
     console.error('POST /api/inventory/reload error:', err)
@@ -103,6 +120,13 @@ router.post('/reload', (req, res) => {
 
 router.get('/files', (req, res) => {
   try {
+    const remoteUrl = String(process.env.INVENTORY_FILE_URL || '').trim()
+    if (remoteUrl) {
+      return res.json({
+        success: true,
+        files: [{ name: 'inventory.xlsx (remote)', url: remoteUrl }],
+      })
+    }
     const files = getXlsxFilesInUserUploads()
     const resolved = resolveInventoryFile()
     const fileList = resolved

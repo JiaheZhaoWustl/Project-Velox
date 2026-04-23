@@ -14,6 +14,7 @@ const IMAGE_PROMPT_PATH = path.join(DATA_DIR, 'cocktail_image_prompt.txt')
 const MOCKTAIL_PROMPT_PATH = path.join(DATA_DIR, 'velox_gpt_mocktail_prompt.txt')
 const INGREDIENTS_PATH = path.join(DATA_DIR, 'velox_ingredients.json')
 const GENERATED_IMAGES_DIR = path.join(PROJECT_ROOT, 'generated-images')
+const isVercelRuntime = process.env.VERCEL === '1'
 
 function loadSystemPrompt() {
   try {
@@ -239,6 +240,7 @@ function normalizeRecommendationsResponse(raw) {
 }
 
 function shouldAppendRecommendationLog() {
+  if (isVercelRuntime) return false
   const v = process.env.GPT_RECOMMENDATION_LOG
   if (v == null || String(v).trim() === '') return true
   return !/^(0|false|off|no)$/i.test(String(v).trim())
@@ -547,15 +549,28 @@ async function _generateImage(slug, cocktailName, glassware, drinkColor, apiKey)
     throw err
   }
 
+  const imgRes = await fetch(imageUrl)
+  const buffer = Buffer.from(await imgRes.arrayBuffer())
+
+  // In Vercel, persist generated images to Blob storage.
+  if (isVercelRuntime && process.env.BLOB_READ_WRITE_TOKEN) {
+    const { put } = require('@vercel/blob')
+    const filename = `${slug}-${Date.now()}.png`
+    const blob = await put(`generated-images/${filename}`, buffer, {
+      access: 'public',
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+      addRandomSuffix: false,
+      contentType: 'image/png',
+    })
+    console.log('[GPT-Image] Uploaded to Blob:', blob.url)
+    return { filename, filepath: blob.url }
+  }
+
   fs.mkdirSync(GENERATED_IMAGES_DIR, { recursive: true })
   const filename = `${slug}-${Date.now()}.png`
   const filepath = path.join(GENERATED_IMAGES_DIR, filename)
-
-  const imgRes = await fetch(imageUrl)
-  const buffer = Buffer.from(await imgRes.arrayBuffer())
   fs.writeFileSync(filepath, buffer)
   console.log('[GPT-Image] Saved:', filepath)
-
   return { filename, filepath }
 }
 

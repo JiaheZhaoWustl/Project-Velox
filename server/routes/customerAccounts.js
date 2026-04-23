@@ -18,14 +18,14 @@ function isMobileClient(req) {
   return /android|iphone|ipod|mobile/.test(ua)
 }
 
-function requireAccount(req, res, next) {
+async function requireAccount(req, res, next) {
   const phoneKey = getPhoneKeyFromRequest(req)
   if (!phoneKey) {
     return res.status(401).json({ success: false, error: 'Missing X-Customer-Phone' })
   }
-  let account = store.getAccount(phoneKey)
+  let account = await store.getAccount(phoneKey)
   if (!account && autoCreateMissing) {
-    account = store.upsertAccount(phoneKey, String(req.headers['x-customer-display'] || phoneKey))
+    account = await store.upsertAccount(phoneKey, String(req.headers['x-customer-display'] || phoneKey))
   }
   if (!account) {
     return res.status(404).json({ success: false, error: 'Account not found' })
@@ -36,14 +36,14 @@ function requireAccount(req, res, next) {
 }
 
 /** Public: create or refresh account by phone */
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const display = req.body?.phone ?? ''
     const phoneKey = store.normalizePhone(display)
     if (!phoneKey) {
       return res.status(400).json({ success: false, error: 'Invalid phone number' })
     }
-    const account = store.upsertAccount(phoneKey, display.trim() || phoneKey)
+    const account = await store.upsertAccount(phoneKey, display.trim() || phoneKey)
     res.json({
       success: true,
       phoneKey,
@@ -79,10 +79,10 @@ router.get('/me', requireAccount, (req, res) => {
   })
 })
 
-router.patch('/me/taste-profile', requireAccount, (req, res) => {
+router.patch('/me/taste-profile', requireAccount, async (req, res) => {
   try {
     const id = req.body?.tasteProfileId
-    store.setTasteProfileId(req.phoneKey, id == null ? null : String(id))
+    await store.setTasteProfileId(req.phoneKey, id == null ? null : String(id))
     res.json({ success: true, tasteProfileId: id || null })
   } catch (err) {
     res.status(500).json({ success: false, error: err.message })
@@ -93,21 +93,21 @@ router.get('/collection', requireAccount, (req, res) => {
   res.json({ success: true, items: req.account.collection })
 })
 
-router.post('/collection', requireAccount, (req, res) => {
+router.post('/collection', requireAccount, async (req, res) => {
   try {
     const { name, recipeId, notes, source } = req.body || {}
     if (!name || !String(name).trim()) {
       return res.status(400).json({ success: false, error: 'name required' })
     }
-    const item = store.addCollectionItem(req.phoneKey, { name, recipeId, notes, source })
+    const item = await store.addCollectionItem(req.phoneKey, { name, recipeId, notes, source })
     res.json({ success: true, item })
   } catch (err) {
     res.status(500).json({ success: false, error: err.message })
   }
 })
 
-router.delete('/collection/:itemId', requireAccount, (req, res) => {
-  const ok = store.removeCollectionItem(req.phoneKey, req.params.itemId)
+router.delete('/collection/:itemId', requireAccount, async (req, res) => {
+  const ok = await store.removeCollectionItem(req.phoneKey, req.params.itemId)
   if (!ok) return res.status(404).json({ success: false, error: 'Item not found' })
   res.json({ success: true })
 })
@@ -117,9 +117,9 @@ router.get('/orders', requireAccount, (req, res) => {
 })
 
 /** Adds one mock “open kitchen” order for demos */
-router.post('/orders/demo', requireAccount, (req, res) => {
+router.post('/orders/demo', requireAccount, async (req, res) => {
   try {
-    const order = store.addDemoOrder(req.phoneKey)
+    const order = await store.addDemoOrder(req.phoneKey)
     res.json({ success: true, order })
   } catch (err) {
     res.status(500).json({ success: false, error: err.message })
@@ -127,9 +127,9 @@ router.post('/orders/demo', requireAccount, (req, res) => {
 })
 
 /** Remove every order on this account */
-router.delete('/orders', requireAccount, (req, res) => {
+router.delete('/orders', requireAccount, async (req, res) => {
   try {
-    const cleared = store.clearOrders(req.phoneKey)
+    const cleared = await store.clearOrders(req.phoneKey)
     if (cleared == null) return res.status(404).json({ success: false, error: 'Account not found' })
     res.json({ success: true, cleared })
   } catch (err) {
@@ -138,7 +138,7 @@ router.delete('/orders', requireAccount, (req, res) => {
 })
 
 /** Place order from menu item (name + price); mock kitchen flow */
-router.post('/orders', requireAccount, (req, res) => {
+router.post('/orders', requireAccount, async (req, res) => {
   try {
     const { name, price, section, ingredients } = req.body || {}
     if (!name || !String(name).trim()) {
@@ -166,7 +166,7 @@ router.post('/orders', requireAccount, (req, res) => {
       })
     }
 
-    const order = store.addMenuOrder(req.phoneKey, { name, price, section, ingredients })
+    const order = await store.addMenuOrder(req.phoneKey, { name, price, section, ingredients })
     if (!order) return res.status(500).json({ success: false, error: 'Could not create order' })
     res.json({ success: true, order })
   } catch (err) {

@@ -1,8 +1,7 @@
 const fs = require('fs')
 
-function parseMenuTextFile(filePath) {
+function parseMenuText(content) {
   try {
-    const content = fs.readFileSync(filePath, 'utf-8')
     const lines = content.split('\n').map((l) => l.trim())
 
     const sections = []
@@ -146,4 +145,9 @@ function parseMenuTextFile(filePath) {
   }
 }
 
-module.exports = { parseMenuTextFile }
+function parseMenuTextFile(filePath) {
+  const content = fs.readFileSync(filePath, 'utf-8')
+  return parseMenuText(content)
+}
+
+module.exports = { parseMenuTextFile, parseMenuText }

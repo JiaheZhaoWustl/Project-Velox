@@ -1,12 +1,24 @@
 const path = require('path')
 const router = require('express').Router()
 const { getPdfFilesInUserUploads, resolveMenuFile } = require('../utils/fileResolution')
-const { parseMenuTextFile } = require('../utils/menuParser')
+const { parseMenuTextFile, parseMenuText } = require('../utils/menuParser')
 const { serveFile } = require('../utils/fileServe')
 const { getMenuItemDetailFromGpt } = require('../gpt')
+const { fetchTextFromUrl } = require('../utils/remoteFiles')
 
-router.get('/items', (req, res) => {
+router.get('/items', async (req, res) => {
   try {
+    const remoteUrl = String(process.env.MENU_FILE_URL || '').trim()
+    if (remoteUrl) {
+      const content = await fetchTextFromUrl(remoteUrl)
+      const { sections, items } = parseMenuText(content)
+      return res.json({
+        success: true,
+        sections,
+        items,
+        sourceFile: remoteUrl,
+      })
+    }
     const menuFilePath = resolveMenuFile()
     if (!menuFilePath) {
       return res.json({
@@ -60,6 +72,13 @@ router.post('/item-detail', async (req, res) => {
 
 router.get('/files', (req, res) => {
   try {
+    const remoteUrl = String(process.env.MENU_FILE_URL || '').trim()
+    if (remoteUrl) {
+      return res.json({
+        success: true,
+        files: [{ name: 'menu.txt (remote)', url: remoteUrl, mtime: Date.now() }],
+      })
+    }
     const pdfFiles = getPdfFilesInUserUploads()
     res.json({
       success: true,

@@ -18,54 +18,53 @@ const { router: tasteProfileRouter, getTasteProfileById } = require('./routes/ta
 const { router: customerAccountsRouter } = require('./routes/customerAccounts')
 const customerStore = require('./db/customerStore')
 
-const app = express()
-const FRONTEND_ORIGINS = (process.env.FRONTEND_ORIGINS || '')
-  .split(',')
-  .map((s) => s.trim())
-  .filter(Boolean)
+function createApp() {
+  const app = express()
+  const FRONTEND_ORIGINS = (process.env.FRONTEND_ORIGINS || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
 
-function isAllowedOrigin(origin) {
-  if (!origin) return true
-  if (FRONTEND_ORIGINS.length === 0) return true
-  return FRONTEND_ORIGINS.includes(origin)
-}
-
-app.use((req, res, next) => {
-  const origin = req.headers.origin
-  if (!origin) return next()
-
-  if (!isAllowedOrigin(origin)) {
-    if (req.method === 'OPTIONS') return res.sendStatus(403)
-    return res.status(403).json({ success: false, error: 'Origin not allowed' })
+  function isAllowedOrigin(origin) {
+    if (!origin) return true
+    if (FRONTEND_ORIGINS.length === 0) return true
+    return FRONTEND_ORIGINS.includes(origin)
   }
 
-  res.setHeader('Access-Control-Allow-Origin', origin)
-  res.setHeader('Vary', 'Origin')
-  res.setHeader('Access-Control-Allow-Credentials', 'true')
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Content-Type, X-Customer-Phone, X-Customer-Phone-Key, X-Customer-Display'
-  )
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE,OPTIONS')
+  app.use((req, res, next) => {
+    const origin = req.headers.origin
+    if (!origin) return next()
 
-  if (req.method === 'OPTIONS') return res.sendStatus(204)
-  return next()
-})
+    if (!isAllowedOrigin(origin)) {
+      if (req.method === 'OPTIONS') return res.sendStatus(403)
+      return res.status(403).json({ success: false, error: 'Origin not allowed' })
+    }
 
-app.use(express.json())
+    res.setHeader('Access-Control-Allow-Origin', origin)
+    res.setHeader('Vary', 'Origin')
+    res.setHeader('Access-Control-Allow-Credentials', 'true')
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Content-Type, X-Customer-Phone, X-Customer-Phone-Key, X-Customer-Display'
+    )
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE,OPTIONS')
 
-const PORT = process.env.PORT || process.env.API_PORT || 3001
+    if (req.method === 'OPTIONS') return res.sendStatus(204)
+    return next()
+  })
 
-// Mount route modules
-app.use('/api/inventory', inventoryRoutes.router)
-app.use('/api/sales', salesRoutes.router)
-app.use('/api/menu', menuRoutes)
-app.use('/api', reportsRoutes)
-app.use('/api/taste-profile', tasteProfileRouter)
-app.use('/api/customers', customerAccountsRouter)
+  app.use(express.json())
 
-// POST /api/recommendations — GPT cocktail recommendations
-app.post('/api/recommendations', async (req, res) => {
+  // Mount route modules
+  app.use('/api/inventory', inventoryRoutes.router)
+  app.use('/api/sales', salesRoutes.router)
+  app.use('/api/menu', menuRoutes)
+  app.use('/api', reportsRoutes)
+  app.use('/api/taste-profile', tasteProfileRouter)
+  app.use('/api/customers', customerAccountsRouter)
+
+  // POST /api/recommendations — GPT cocktail recommendations
+  app.post('/api/recommendations', async (req, res) => {
   try {
     const directProfile = req.body?.customer_taste_profile
     const profileId = req.body?.profile_id
@@ -102,15 +101,15 @@ app.post('/api/recommendations', async (req, res) => {
     const message = err.status === 503 ? err.message : (err.status === 401 ? 'Invalid OpenAI API key' : err.message || 'Failed to get recommendations')
     res.status(status).json({ success: false, error: message })
   }
-})
+  })
 
-// Serve generated cocktail images (ensure directory exists for express.static)
-const fs = require('fs')
-fs.mkdirSync(GENERATED_IMAGES_DIR, { recursive: true })
-app.use('/api/generated-images', express.static(GENERATED_IMAGES_DIR))
+  // Serve generated cocktail images (ensure directory exists for express.static)
+  const fs = require('fs')
+  fs.mkdirSync(GENERATED_IMAGES_DIR, { recursive: true })
+  app.use('/api/generated-images', express.static(GENERATED_IMAGES_DIR))
 
-// POST /api/cocktail-image — generate a cocktail image via DALL-E
-app.post('/api/cocktail-image', async (req, res) => {
+  // POST /api/cocktail-image — generate a cocktail image via DALL-E
+  app.post('/api/cocktail-image', async (req, res) => {
   try {
     const { cocktailName, glassware, drinkColor } = req.body || {}
     if (!cocktailName) {
@@ -126,14 +125,30 @@ app.post('/api/cocktail-image', async (req, res) => {
     const status = err.status || 500
     res.status(status).json({ success: false, error: err.message })
   }
-})
+  })
 
-app.listen(PORT, () => {
-  const { CUSTOMERS_DB_PATH } = require('./config/paths')
-  console.log(`API running at http://localhost:${PORT}`)
-  console.log(`CORS origins: ${FRONTEND_ORIGINS.length ? FRONTEND_ORIGINS.join(', ') : '(all origins allowed)'}`)
-  const inventoryResolved = resolveInventoryFile()
-  console.log(`Inventory: ${inventoryResolved ? inventoryResolved.name : 'No file found'}`)
-  console.log(`Sales (first ${SALES_MAX_ENTRIES}): ${path.join(USER_UPLOADS, DEFAULT_SALES_FILE)}`)
-  console.log(`Customers DB: ${CUSTOMERS_DB_PATH}`)
-})
+  app.get('/api/health', (_req, res) => {
+    res.json({ success: true, status: 'ok' })
+  })
+
+  app.locals.frontendOrigins = FRONTEND_ORIGINS
+  return app
+}
+
+const app = createApp()
+const PORT = process.env.PORT || process.env.API_PORT || 3001
+
+if (require.main === module) {
+  app.listen(PORT, () => {
+    const { CUSTOMERS_DB_PATH } = require('./config/paths')
+    const FRONTEND_ORIGINS = app.locals.frontendOrigins || []
+    console.log(`API running at http://localhost:${PORT}`)
+    console.log(`CORS origins: ${FRONTEND_ORIGINS.length ? FRONTEND_ORIGINS.join(', ') : '(all origins allowed)'}`)
+    const inventoryResolved = resolveInventoryFile()
+    console.log(`Inventory: ${inventoryResolved ? inventoryResolved.name : 'No file found'}`)
+    console.log(`Sales (first ${SALES_MAX_ENTRIES}): ${path.join(USER_UPLOADS, DEFAULT_SALES_FILE)}`)
+    console.log(`Customers DB: ${CUSTOMERS_DB_PATH}`)
+  })
+}
+
+module.exports = { app, createApp }

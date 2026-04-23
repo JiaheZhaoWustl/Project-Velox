@@ -16,11 +16,45 @@ const menuRoutes = require('./routes/menu')
 const reportsRoutes = require('./routes/reports')
 const { router: tasteProfileRouter, getTasteProfileById } = require('./routes/tasteProfile')
 const { router: customerAccountsRouter } = require('./routes/customerAccounts')
+const customerStore = require('./db/customerStore')
 
 const app = express()
+const FRONTEND_ORIGINS = (process.env.FRONTEND_ORIGINS || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean)
+
+function isAllowedOrigin(origin) {
+  if (!origin) return true
+  if (FRONTEND_ORIGINS.length === 0) return true
+  return FRONTEND_ORIGINS.includes(origin)
+}
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin
+  if (!origin) return next()
+
+  if (!isAllowedOrigin(origin)) {
+    if (req.method === 'OPTIONS') return res.sendStatus(403)
+    return res.status(403).json({ success: false, error: 'Origin not allowed' })
+  }
+
+  res.setHeader('Access-Control-Allow-Origin', origin)
+  res.setHeader('Vary', 'Origin')
+  res.setHeader('Access-Control-Allow-Credentials', 'true')
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, X-Customer-Phone, X-Customer-Phone-Key, X-Customer-Display'
+  )
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE,OPTIONS')
+
+  if (req.method === 'OPTIONS') return res.sendStatus(204)
+  return next()
+})
+
 app.use(express.json())
 
-const PORT = process.env.API_PORT || 3001
+const PORT = process.env.PORT || process.env.API_PORT || 3001
 
 // Mount route modules
 app.use('/api/inventory', inventoryRoutes.router)
@@ -55,7 +89,12 @@ app.post('/api/recommendations', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Missing customer taste profile' })
     }
 
-    const { recommendations } = await getRecommendations(customerProfile, process.env.OPENAI_API_KEY)
+    const phoneRaw = req.headers['x-customer-phone'] || req.headers['x-customer-phone-key']
+    const phoneKey = customerStore.normalizePhone(phoneRaw)
+    const orderHistory = phoneKey ? (customerStore.getAccount(phoneKey)?.orders || []) : []
+    const { recommendations } = await getRecommendations(customerProfile, process.env.OPENAI_API_KEY, {
+      orderHistory,
+    })
     res.json({ success: true, recommendations })
   } catch (err) {
     console.error('[GPT] API call failed:', err.message)
@@ -92,6 +131,7 @@ app.post('/api/cocktail-image', async (req, res) => {
 app.listen(PORT, () => {
   const { CUSTOMERS_DB_PATH } = require('./config/paths')
   console.log(`API running at http://localhost:${PORT}`)
+  console.log(`CORS origins: ${FRONTEND_ORIGINS.length ? FRONTEND_ORIGINS.join(', ') : '(all origins allowed)'}`)
   const inventoryResolved = resolveInventoryFile()
   console.log(`Inventory: ${inventoryResolved ? inventoryResolved.name : 'No file found'}`)
   console.log(`Sales (first ${SALES_MAX_ENTRIES}): ${path.join(USER_UPLOADS, DEFAULT_SALES_FILE)}`)

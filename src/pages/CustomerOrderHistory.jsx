@@ -130,7 +130,7 @@ function CustomerOrderHistory() {
                   <p className="customer-order-summary">{o.summary}</p>
                   <div className="customer-order-card-bottom">
                     <span className="customer-order-total">
-                      ${Number(o.total || 0).toFixed(2)} {o.currency || 'USD'}
+                      ${Number(o.fullAmount ?? o.total ?? 0).toFixed(2)} {o.currency || 'USD'}
                     </span>
                     <span className="customer-order-date">
                       {o.createdAt ? new Date(o.createdAt).toLocaleString() : ''}

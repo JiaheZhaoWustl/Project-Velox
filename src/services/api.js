@@ -5,7 +5,16 @@
 
 import { customerAuthHeaders } from '../utils/customerSession'
 
-const BASE = '/api'
+const API_BASE_URL = String(import.meta.env.VITE_API_BASE_URL || '').trim().replace(/\/+$/, '')
+const BASE = API_BASE_URL ? `${API_BASE_URL}/api` : '/api'
+
+export function toApiAssetUrl(url) {
+  const raw = String(url || '').trim()
+  if (!raw) return ''
+  if (/^https?:\/\//i.test(raw)) return raw
+  if (raw.startsWith('/')) return API_BASE_URL ? `${API_BASE_URL}${raw}` : raw
+  return API_BASE_URL ? `${API_BASE_URL}/${raw}` : raw
+}
 
 async function request(url, options = {}) {
   const res = await fetch(`${BASE}${url}`, {

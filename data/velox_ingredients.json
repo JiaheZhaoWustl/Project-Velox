@@ -1,0 +1,486 @@
+{
+  "event": "Project Velox Capstone Showcase",
+  "serve_target": "75-90 drinks",
+  "duration": "2-2.5 hours",
+  "cup_types": ["rocks", "margarita"],
+  "ingredients": {
+    "juices": [
+      {
+        "id": "orange_juice",
+        "name": "Orange Juice",
+        "brand": "365 Organic (No Pulp)",
+        "volume_ml": 1540,
+        "category": "citrus_base"
+      },
+      {
+        "id": "pineapple_juice",
+        "name": "Pineapple Juice",
+        "brand": "365",
+        "volume_ml": 1540,
+        "category": "tropical_base"
+      },
+      {
+        "id": "coconut_juice",
+        "name": "Coconut Juice",
+        "brand": "Coco Palm",
+        "volume_ml": 1000,
+        "category": "tropical_creamy"
+      }
+    ],
+    "acidifiers_and_modifiers": [
+      {
+        "id": "lime_juice_bottled",
+        "name": "Lime Juice",
+        "brand": "Polenghi Organic",
+        "volume_ml": 200,
+        "category": "acid",
+        "usage": "Modifier only, not a base. Typically 10-20 ml per drink."
+      },
+      {
+        "id": "lemon_juice_bottled",
+        "name": "Lemon Juice",
+        "brand": "Polenghi Organic",
+        "volume_ml": 200,
+        "category": "acid",
+        "usage": "Modifier only, not a base. Typically 10-20 ml per drink."
+      },
+      {
+        "id": "ginger_juice",
+        "name": "Ginger Juice",
+        "brand": "The Ginger People",
+        "volume_ml": 147,
+        "category": "spice_modifier",
+        "usage": "Modifier only. Typically 3-10 ml per drink for heat and warmth."
+      }
+    ],
+    "carbonation": [
+      {
+        "id": "tonic_water",
+        "name": "Tonic Water",
+        "brand": "365",
+        "format": "12 x 355ml cans",
+        "total_volume_ml": 4260,
+        "category": "mixer"
+      },
+      {
+        "id": "sparkling_water",
+        "name": "Sparkling Mineral Water",
+        "brand": "San Pellegrino",
+        "format": "13 x 500ml bottles",
+        "total_volume_ml": 6500,
+        "category": "mixer"
+      },
+      {
+        "id": "still_water",
+        "name": "Spring Water",
+        "brand": "365",
+        "format": "500ml bottles",
+        "availability": "unlimited",
+        "category": "utility"
+      },
+      {
+        "id": "vita_lemon_tea",
+        "name": "Vita Lemon Sparkling Tea",
+        "brand": "Vita",
+        "format": "6 x 310ml",
+        "total_volume_ml": 1860,
+        "category": "flavored_mixer"
+      }
+    ],
+    "tea_and_functional": [
+      {
+        "id": "oolong_tea",
+        "name": "Oolong Tea (Unsweetened)",
+        "brand": "Ito En",
+        "volume_ml": 2000,
+        "category": "tea_base"
+      },
+      {
+        "id": "jasmine_green_tea",
+        "name": "Jasmine Green Tea (Unsweetened)",
+        "brand": "Ito En",
+        "volume_ml": 2000,
+        "category": "tea_base"
+      },
+      {
+        "id": "suanmeitang",
+        "name": "Suanmeitang (Sour Plum Drink)",
+        "brand": "Kang Shifu",
+        "format": "3 x 500ml",
+        "total_volume_ml": 1500,
+        "category": "eastern_specialty",
+        "notes": "Traditional Chinese sweet-sour plum beverage with smoky umeboshi notes"
+      },
+      {
+        "id": "yakult",
+        "name": "Yakult Probiotic Drink",
+        "volume_ml": 325,
+        "category": "probiotic_specialty",
+        "notes": "Sweet tangy probiotic yogurt drink"
+      },
+      {
+        "id": "tianrun_kefir",
+        "name": "Tianrun Kefir Drink",
+        "volume_ml": 300,
+        "category": "specialty_creamy",
+        "notes": "Non-alcoholic fermented milk beverage with slight tang"
+      },
+      {
+        "id": "jiuniang",
+        "name": "Fermented Rice Pudding (Jiuniang)",
+        "brand": "Mipopo",
+        "weight_g": 900,
+        "category": "eastern_signature",
+        "notes": "Non-alcoholic sweet fermented glutinous rice with subtle floral aroma"
+      }
+    ],
+    "garnish_only_produce": [
+      {
+        "id": "fresh_lemon",
+        "name": "Lemon",
+        "quantity": 4,
+        "source": "Whole Foods",
+        "use": "garnish_only",
+        "notes": "Sliced for wheels and twists. NOT juiced into drinks."
+      },
+      {
+        "id": "fresh_lime",
+        "name": "Lime",
+        "quantity": 5,
+        "source": "Whole Foods",
+        "use": "garnish_only",
+        "notes": "Sliced for wheels and wedges. NOT juiced into drinks."
+      },
+      {
+        "id": "fresh_cucumber",
+        "name": "Persian Cucumber",
+        "quantity": 1,
+        "use": "garnish_only",
+        "notes": "Slices, spears, or ribbons for visual garnish only."
+      },
+      {
+        "id": "blueberries",
+        "name": "Jumbo Blueberries",
+        "weight_g": 100,
+        "use": "garnish_only",
+        "notes": "Drop 2-3 into drink or skewer on cocktail pick."
+      },
+      {
+        "id": "fresh_mint",
+        "name": "Mint",
+        "brand": "Meyer Farms",
+        "weight_oz": 15,
+        "format": "2 x 7.5oz",
+        "use": "garnish_only",
+        "notes": "Sprig on top of drink or single leaves. Do not muddle."
+      }
+    ],
+    "sweeteners": [
+      {
+        "id": "simple_syrup",
+        "name": "Simple Syrup",
+        "brand": "Master of Mixes",
+        "volume_ml": 375,
+        "category": "base_sweetener",
+        "ratio": "1:1"
+      },
+      {
+        "id": "honey",
+        "name": "Honey",
+        "weight_g": 15,
+        "category": "natural_sweetener",
+        "notes": "Small quantity, use sparingly"
+      }
+    ],
+    "housemade_syrups": [
+      {
+        "id": "plum_syrup",
+        "name": "Plum Syrup (House-made)",
+        "description": "Cold-infused Korean damson plum syrup with brown sugar plum candy and a touch of salt",
+        "volume_ml_estimated": 130,
+        "prep": "T-1 day cold infusion, filtered T-0 morning",
+        "category": "eastern_signature_syrup",
+        "flavor_profile": {
+          "sweet": 4,
+          "sour": 3,
+          "salty": 2,
+          "umami": 3,
+          "smoky": 2
+        }
+      },
+      {
+        "id": "osmanthus_honey_syrup",
+        "name": "Osmanthus Honey Syrup (House-made)",
+        "description": "Floral syrup made with two-batch osmanthus infusion, sugar, honey, and a touch of lime",
+        "volume_ml_estimated": 140,
+        "prep": "T-1 day, 6-step cooked infusion",
+        "category": "eastern_signature_syrup",
+        "flavor_profile": {
+          "sweet": 5,
+          "floral": 5,
+          "honey": 3
+        }
+      },
+      {
+        "id": "brown_sugar_syrup",
+        "name": "Brown Sugar Syrup (House-made)",
+        "description": "1:1 brown sugar and water, lightly reduced",
+        "volume_ml_estimated": 110,
+        "prep": "T-1 day, 3-5 min simmer",
+        "category": "warm_sweetener",
+        "flavor_profile": {
+          "sweet": 5,
+          "caramel": 4,
+          "molasses": 3
+        }
+      },
+      {
+        "id": "saline_solution",
+        "name": "Saline Solution (House-made)",
+        "description": "1:4 fleur de sel to water solution",
+        "volume_ml_estimated": 80,
+        "category": "flavor_enhancer",
+        "usage": "1-2 dashes per drink",
+        "function": "taste_sharpener"
+      }
+    ],
+    "coffee_and_flavorings": [
+      {
+        "id": "espresso_starbucks",
+        "name": "Starbucks Signature Espresso",
+        "source": "4 x Venti iced with 5 shots each",
+        "total_volume_ml_estimated": 600,
+        "category": "coffee_primary",
+        "notes": "Purchased day-of event, 2 hours before service"
+      },
+      {
+        "id": "cold_brew_concentrate",
+        "name": "Cold Brew Vanilla Coffee Concentrate",
+        "brand": "Page Lab",
+        "format": "3 x 25ml",
+        "total_volume_ml": 75,
+        "category": "coffee_backup"
+      },
+      {
+        "id": "cinnamon_powder",
+        "name": "Ceylon Cinnamon Powder",
+        "brand": "Simply Organic",
+        "weight_g": 56,
+        "category": "garnish_dust",
+        "usage": "Dusted on top of drink for aroma and visual"
+      },
+      {
+        "id": "dried_osmanthus",
+        "name": "Dried Osmanthus Flowers",
+        "weight_g": 2,
+        "category": "eastern_floral_garnish",
+        "usage": "Garnish only - float on drink surface for visual and aroma"
+      }
+    ],
+    "dairy_and_texture": [
+      {
+        "id": "half_and_half",
+        "name": "Half & Half",
+        "brand": "365",
+        "volume_ml": 473,
+        "category": "creamer"
+      },
+      {
+        "id": "fee_foam",
+        "name": "Fee Foam (Non-Alcoholic Foaming Agent)",
+        "brand": "Fee Brothers",
+        "volume_ml": 150,
+        "category": "foamer",
+        "usage": "2-3 drops per drink requiring foam",
+        "notes": "100% non-alcoholic foaming agent - safe for mocktails"
+      }
+    ],
+    "non_alcoholic_spirits": [
+      {
+        "id": "na_gin",
+        "name": "Seedlip Garden 108 (Non-Alcoholic Spirit)",
+        "brand": "Seedlip",
+        "volume_ml": 700,
+        "category": "herbal_base",
+        "notes": "100% non-alcoholic, herbal/botanical flavor profile with peas, hay, and spearmint",
+        "flavor_profile": {
+          "herbal": 5,
+          "botanical": 5,
+          "juniper": 3,
+          "cucumber_pea": 4
+        }
+      },
+      {
+        "id": "na_rum",
+        "name": "Ritual Zero Proof Rum Alternative (Non-Alcoholic)",
+        "brand": "Ritual Zero Proof",
+        "volume_ml": 750,
+        "category": "tropical_base",
+        "notes": "100% non-alcoholic, mimics rum with sugar cane, vanilla, and oak notes",
+        "flavor_profile": {
+          "sweet": 3,
+          "vanilla": 3,
+          "caramel": 2,
+          "oak": 2
+        }
+      }
+    ],
+    "bitters": [
+      {
+        "id": "woodford_bitters_aromatic",
+        "name": "Woodford Reserve Aromatic Bitters",
+        "volume_ml": 10,
+        "category": "flavor_modifier",
+        "usage": "1-2 dashes per drink",
+        "notes": "Allowed in mocktails at this event (trace alcohol acceptable per event protocol)"
+      },
+      {
+        "id": "woodford_bitters_orange",
+        "name": "Woodford Reserve Orange Bitters",
+        "volume_ml": 10,
+        "category": "flavor_modifier",
+        "usage": "1-2 dashes per drink",
+        "notes": "Allowed in mocktails at this event (trace alcohol acceptable per event protocol)"
+      },
+      {
+        "id": "woodford_bitters_chocolate",
+        "name": "Woodford Reserve Chocolate Bitters",
+        "volume_ml": 10,
+        "category": "flavor_modifier",
+        "usage": "1-2 dashes per drink",
+        "notes": "Allowed in mocktails at this event (trace alcohol acceptable per event protocol)"
+      },
+      {
+        "id": "woodford_bitters_spiced_cherry",
+        "name": "Woodford Reserve Spiced Cherry Bitters",
+        "volume_ml": 10,
+        "category": "flavor_modifier",
+        "usage": "1-2 dashes per drink",
+        "notes": "Allowed in mocktails at this event (trace alcohol acceptable per event protocol)"
+      },
+      {
+        "id": "woodford_bitters_sassafras_sorghum",
+        "name": "Woodford Reserve Sassafras & Sorghum Bitters",
+        "volume_ml": 10,
+        "category": "flavor_modifier",
+        "usage": "1-2 dashes per drink",
+        "notes": "Allowed in mocktails at this event (trace alcohol acceptable per event protocol)"
+      }
+    ],
+    "seasoning": [
+      {
+        "id": "fleur_de_sel",
+        "name": "Fleur de Sel Sea Salt",
+        "brand": "Whole Foods",
+        "weight_g": 119,
+        "category": "finishing_salt",
+        "notes": "Used primarily to make saline solution; can also rim glass or sprinkle as garnish"
+      }
+    ],
+    "ice": [
+      {
+        "id": "Rock Ice",
+        "name": "Rock Ice (Cubed)",
+        "source": "Total Wine",
+        "weight_lbs": 30,
+        "use": "serving_and_cooling"
+      },
+      {
+        "id": "Shaking IIce",
+        "name": "Shaking Ice (Home Freezer)",
+        "weight_lbs_min": 15,
+        "use": "shaker_only",
+        "notes": "Prepped T-3 days ahead"
+      }
+    ]
+  },
+  "ingredient_tags": {
+    "eastern_signature": [
+      "jiuniang",
+      "suanmeitang",
+      "dried_osmanthus",
+      "oolong_tea",
+      "jasmine_green_tea",
+      "plum_syrup",
+      "osmanthus_honey_syrup"
+    ],
+    "tropical": [
+      "pineapple_juice",
+      "coconut_juice",
+      "na_rum"
+    ],
+    "herbal_botanical": [
+      "na_gin"
+    ],
+    "coffee_based": [
+      "espresso_starbucks",
+      "cold_brew_concentrate",
+      "half_and_half",
+      "cinnamon_powder",
+      "brown_sugar_syrup"
+    ],
+    "citrus_acidifiers": [
+      "lime_juice_bottled",
+      "lemon_juice_bottled",
+      "orange_juice"
+    ],
+    "creamy_texture": [
+      "half_and_half",
+      "coconut_juice",
+      "yakult",
+      "tianrun_kefir",
+      "fee_foam"
+    ],
+    "spice_modifier": [
+      "ginger_juice",
+      "cinnamon_powder"
+    ],
+    "umami_savory": [
+      "plum_syrup",
+      "saline_solution"
+    ],
+    "base_liquids": [
+      "orange_juice",
+      "pineapple_juice",
+      "coconut_juice",
+      "oolong_tea",
+      "jasmine_green_tea",
+      "suanmeitang",
+      "yakult",
+      "tianrun_kefir",
+      "jiuniang",
+      "vita_lemon_tea",
+      "na_gin",
+      "na_rum"
+    ],
+    "modifiers_only": [
+      "lime_juice_bottled",
+      "lemon_juice_bottled",
+      "ginger_juice",
+      "simple_syrup",
+      "honey",
+      "plum_syrup",
+      "osmanthus_honey_syrup",
+      "brown_sugar_syrup",
+      "saline_solution",
+      "cold_brew_concentrate",
+      "cinnamon_powder",
+      "fee_foam",
+      "fleur_de_sel",
+      "woodford_bitters_aromatic",
+      "woodford_bitters_orange",
+      "woodford_bitters_chocolate",
+      "woodford_bitters_spiced_cherry",
+      "woodford_bitters_sassafras_sorghum"
+    ],
+    "garnish_only": [
+      "fresh_lemon",
+      "fresh_lime",
+      "fresh_cucumber",
+      "blueberries",
+      "fresh_mint",
+      "dried_osmanthus",
+      "cinnamon_powder"
+    ]
+  }
+}

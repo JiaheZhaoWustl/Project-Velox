@@ -409,14 +409,29 @@ function CustomerOnboarding() {
           </>
         )}
         {!recommendationsError && (
-          <button
-            type="button"
-            className="customer-btn-continue"
-            onClick={handleFinish}
-            disabled={isLoadingRecommendations}
-          >
-            {isLoadingRecommendations ? '…' : 'Finish — recommendations'}
-          </button>
+          <>
+            <button
+              type="button"
+              className="customer-btn-continue"
+              onClick={handleFinish}
+              disabled={isLoadingRecommendations}
+            >
+              {isLoadingRecommendations ? 'Generating recommendations…' : 'Finish — recommendations'}
+            </button>
+            {isLoadingRecommendations && (
+              <div className="onboarding-loading" role="status" aria-live="polite">
+                <span className="onboarding-loading-spinner" aria-hidden="true" />
+                <p className="onboarding-loading-text">
+                  Crafting your best-fit drinks
+                  <span className="onboarding-loading-dots" aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                  </span>
+                </p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </CustomerLayout>

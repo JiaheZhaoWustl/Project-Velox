@@ -12,6 +12,7 @@ const SYSTEM_PROMPT_PATH = path.join(DATA_DIR, 'velox_gpt_api_prompt.txt')
 const RECOMMENDATION_LOG_PATH = path.join(DATA_DIR, 'gpt_recommendation_log.jsonl')
 const IMAGE_PROMPT_PATH = path.join(DATA_DIR, 'cocktail_image_prompt.txt')
 const MOCKTAIL_PROMPT_PATH = path.join(DATA_DIR, 'velox_gpt_mocktail_prompt.txt')
+const INGREDIENTS_PATH = path.join(DATA_DIR, 'velox_ingredients.json')
 const GENERATED_IMAGES_DIR = path.join(PROJECT_ROOT, 'generated-images')
 
 function loadSystemPrompt() {
@@ -27,6 +28,70 @@ function loadMocktailPrompt() {
     return fs.readFileSync(MOCKTAIL_PROMPT_PATH, 'utf-8')
   } catch {
     return 'You are a non-alcoholic drink recommendation engine. Every drink must be 100% non-alcoholic. Return valid JSON only.'
+  }
+}
+
+/** Load the pantry JSON used to constrain mocktail recipes to on-hand ingredients. */
+function loadIngredientsPantry() {
+  try {
+    const raw = fs.readFileSync(INGREDIENTS_PATH, 'utf-8')
+    return JSON.parse(raw)
+  } catch (e) {
+    console.warn('[GPT] Could not load ingredients pantry:', e.message)
+    return null
+  }
+}
+
+function toSafeString(value) {
+  return String(value || '').trim()
+}
+
+function buildIngredientUsageBalance(orderHistory, pantry) {
+  if (!pantry?.ingredients || !Array.isArray(orderHistory) || orderHistory.length === 0) return null
+
+  const juiceItems = Array.isArray(pantry.ingredients.juices) ? pantry.ingredients.juices : []
+  if (juiceItems.length === 0) return null
+
+  const juiceNames = juiceItems
+    .map((item) => toSafeString(item?.name))
+    .filter(Boolean)
+
+  if (juiceNames.length === 0) return null
+
+  const usageCounts = Object.fromEntries(juiceNames.map((name) => [name, 0]))
+
+  for (const order of orderHistory) {
+    const items = Array.isArray(order?.items) ? order.items : []
+    for (const row of items) {
+      const ingredientLines = Array.isArray(row?.ingredients) ? row.ingredients : []
+      for (const line of ingredientLines) {
+        const raw = toSafeString(line).toLowerCase()
+        if (!raw) continue
+        for (const name of juiceNames) {
+          if (raw.includes(name.toLowerCase())) usageCounts[name] += 1
+        }
+      }
+    }
+  }
+
+  const totalHits = Object.values(usageCounts).reduce((sum, n) => sum + n, 0)
+  if (totalHits === 0) return null
+
+  const avg = totalHits / juiceNames.length
+  const overused = juiceNames.filter((name) => usageCounts[name] >= Math.max(3, avg * 1.3))
+  const underused = juiceNames.filter((name) => usageCounts[name] <= avg * 0.7)
+  const ranked = [...juiceNames].sort((a, b) => usageCounts[b] - usageCounts[a])
+
+  return {
+    tracked_juices: juiceNames,
+    usage_counts: usageCounts,
+    total_hits: totalHits,
+    balancing_guidance: {
+      overused,
+      underused,
+      priority_reduce: ranked.slice(0, 2),
+      priority_increase: [...ranked].reverse().slice(0, 2),
+    },
   }
 }
 
@@ -206,7 +271,7 @@ function appendRecommendationLog({ model, customer_profile, recommendations }) {
  * @returns {Promise<{ success: true, recommendations: object }>}
  * @throws {Error} with .status for HTTP status (401, 502, 503)
  */
-async function getRecommendations(customerProfile, apiKey) {
+async function getRecommendations(customerProfile, apiKey, options = {}) {
   if (!apiKey || !apiKey.trim()) {
     const err = new Error('OpenAI API key not configured. Add OPENAI_API_KEY to your .env file.')
     err.status = 503
@@ -216,13 +281,53 @@ async function getRecommendations(customerProfile, apiKey) {
   const customerProfilePayload = buildCustomerProfileForPrompt(customerProfile)
 
   const isMocktail = customerProfilePayload.mocktail === 1
-  const systemPrompt = isMocktail ? loadMocktailPrompt() : loadSystemPrompt()
+  let systemPrompt = isMocktail ? loadMocktailPrompt() : loadSystemPrompt()
   const promptSource = isMocktail ? MOCKTAIL_PROMPT_PATH : SYSTEM_PROMPT_PATH
   console.log('[GPT] Prompt loaded from:', promptSource, isMocktail ? '(MOCKTAIL)' : '')
+
+  // Mocktails are constrained to the Velox pantry. Inject the ingredient list
+  // into both the system prompt and user message so the model cannot drift.
+  const pantry = loadIngredientsPantry()
+  if (isMocktail) {
+    if (pantry) {
+      systemPrompt += `\n\nAVAILABLE INGREDIENTS (authoritative pantry — the only ingredients you may use):\n${JSON.stringify(
+        pantry,
+        null,
+        2
+      )}`
+      console.log('[GPT] Injected pantry into mocktail prompt from:', INGREDIENTS_PATH)
+    } else {
+      console.warn('[GPT] Mocktail mode but pantry unavailable — model will have no ingredient list.')
+    }
+  }
+
+  const ingredientUsageBalance = buildIngredientUsageBalance(options.orderHistory || [], pantry)
+  if (ingredientUsageBalance) {
+    systemPrompt += `\n\nINGREDIENT ROTATION GOAL:\nWhen possible, avoid repeatedly overused juices and help spread usage more evenly across available juices while still matching the user's taste profile. This is a secondary preference and must not violate hard safety or recipe constraints.`
+  }
+
   console.log('[GPT] Sending API request to OpenAI...')
 
-  const userMessage = `customer_profile:
-${JSON.stringify(customerProfilePayload, null, 2)}`
+  const messageSections = [
+    `customer_profile:
+${JSON.stringify(customerProfilePayload, null, 2)}
+`,
+  ]
+
+  if (isMocktail && pantry) {
+    messageSections.push(`available_ingredients (reminder — use ONLY these ingredients, respecting each item's \`use\`/\`usage\` rules):
+${JSON.stringify(pantry, null, 2)}
+`)
+  }
+
+  if (ingredientUsageBalance) {
+    messageSections.push(`ingredient_usage_balance_from_order_history:
+${JSON.stringify(ingredientUsageBalance, null, 2)}
+
+Use this to reduce repeated reliance on overused juices and favor underused juices when flavor fit is still good.`)
+  }
+
+  const userMessage = messageSections.join('\n')
 
   // Sampling & budget (see .env.example). Low temperature → repetitive "safe" picks.
   // Token limits usually show up as truncated JSON / parse errors, not similarity.

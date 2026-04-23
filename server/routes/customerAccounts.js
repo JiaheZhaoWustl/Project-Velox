@@ -13,6 +13,11 @@ function getPhoneKeyFromRequest(req) {
 /** Always create a file-backed account on first use so anonymous device keys never 404. */
 const autoCreateMissing = true
 
+function isMobileClient(req) {
+  const ua = String(req.headers['user-agent'] || '').toLowerCase()
+  return /android|iphone|ipod|mobile/.test(ua)
+}
+
 function requireAccount(req, res, next) {
   const phoneKey = getPhoneKeyFromRequest(req)
   if (!phoneKey) {
@@ -135,11 +140,33 @@ router.delete('/orders', requireAccount, (req, res) => {
 /** Place order from menu item (name + price); mock kitchen flow */
 router.post('/orders', requireAccount, (req, res) => {
   try {
-    const { name, price, section } = req.body || {}
+    const { name, price, section, ingredients } = req.body || {}
     if (!name || !String(name).trim()) {
       return res.status(400).json({ success: false, error: 'name required' })
     }
-    const order = store.addMenuOrder(req.phoneKey, { name, price, section })
+
+    // Mobile orders are treated as preview-only so they don't affect
+    // persistent order history, inventory balancing, or analytics.
+    if (isMobileClient(req)) {
+      const order = {
+        id: `preview_${Date.now()}`,
+        orderNumber: '',
+        status: 'Preview',
+        total: typeof price === 'number' ? price : 0,
+        currency: 'USD',
+        summary: section ? `${name} (${section})` : name,
+        createdAt: new Date().toISOString(),
+        items: [{ name, qty: 1, price: typeof price === 'number' ? price : 0, ingredients: Array.isArray(ingredients) ? ingredients : [] }],
+      }
+      return res.json({
+        success: true,
+        order,
+        notRecorded: true,
+        message: 'Mobile preview only. Not added to order history.',
+      })
+    }
+
+    const order = store.addMenuOrder(req.phoneKey, { name, price, section, ingredients })
     if (!order) return res.status(500).json({ success: false, error: 'Could not create order' })
     res.json({ success: true, order })
   } catch (err) {

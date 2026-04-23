@@ -29,11 +29,8 @@ function CustomerMenu() {
     setLoading(true)
     setError(null)
 
-    fetch('/api/menu/items')
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to load menu')
-        return res.json()
-      })
+    menuApi
+      .getItems()
       .then((data) => {
         if (!cancelled && data.success) {
           const secs = data.sections || []
@@ -117,7 +114,10 @@ function CustomerMenu() {
         section: selectedItem.section || '',
       })
       const num = data.order?.orderNumber || ''
-      setOrderMsg(num ? `Order placed — ${num}` : 'Order placed.')
+      const msg = data?.notRecorded
+        ? (data.message || 'Mobile preview only. Not added to order history.')
+        : (num ? `Order placed — ${num}` : 'Order placed.')
+      setOrderMsg(msg)
       setTimeout(() => closeModal(), 1400)
     } catch (e) {
       setOrderMsg(e.message || 'Could not place order')

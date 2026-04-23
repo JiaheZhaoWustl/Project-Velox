@@ -6527,6 +6527,58 @@ a.publish-checklist-label:hover {
   margin-top: 24px;
 }
 
+.onboarding-loading {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.onboarding-loading-spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 2px solid rgba(17, 24, 39, 0.2);
+  border-top-color: rgba(17, 24, 39, 0.85);
+  animation: tp-spin 0.9s linear infinite;
+}
+
+.onboarding-loading-text {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #4b5563;
+  display: inline-flex;
+  align-items: center;
+}
+
+.onboarding-loading-dots {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  gap: 3px;
+}
+
+.onboarding-loading-dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.25;
+  animation: tp-loading-dot 1s ease-in-out infinite;
+}
+
+.onboarding-loading-dots span:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.onboarding-loading-dots span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
 .onboarding-form {
   display: flex;
   flex-direction: column;

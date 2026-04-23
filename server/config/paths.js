@@ -11,6 +11,9 @@ const DATA_DIR = process.env.CUSTOMERS_DATA_DIR
 const CUSTOMERS_DB_PATH = process.env.CUSTOMERS_DB_FILE
   ? path.resolve(process.env.CUSTOMERS_DB_FILE)
   : path.join(DATA_DIR, 'customers.json')
+const ORDER_HISTORY_DB_PATH = process.env.ORDER_HISTORY_DB_FILE
+  ? path.resolve(process.env.ORDER_HISTORY_DB_FILE)
+  : path.join(DATA_DIR, 'order-history.json')
 
 module.exports = {
   PROJECT_ROOT,
@@ -19,6 +22,7 @@ module.exports = {
   DATA_DIR,
   TASTE_PROFILES_DIR,
   CUSTOMERS_DB_PATH,
+  ORDER_HISTORY_DB_PATH,
   DEFAULT_INVENTORY_FILE: 'Project_Velox_Fake_Bar_Inventory.xlsx',
   DEFAULT_SALES_FILE: 'Project_Velox_Fake_Sales_Data.xlsx',
   SALES_MAX_ENTRIES: 100,

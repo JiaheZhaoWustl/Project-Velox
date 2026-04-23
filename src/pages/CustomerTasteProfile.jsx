@@ -11,7 +11,7 @@ import {
   MOCK_COCKTAIL,
   buildDisplayCocktail,
 } from '../utils/tasteProfileDisplay'
-import { customerApi, cocktailImageApi } from '../services/api'
+import { customerApi, cocktailImageApi, toApiAssetUrl } from '../services/api'
 import { getCustomerPhoneDisplay } from '../utils/customerSession'
 
 function CustomerTasteProfile() {
@@ -86,8 +86,9 @@ function CustomerTasteProfile() {
       .generate({ cocktailName: name, glassware: glassware || '' })
       .then((data) => {
         if (!cancelled && data.imageUrl) {
-          setCocktailImageUrl(data.imageUrl)
-          localStorage.setItem(cacheKey, data.imageUrl)
+          const resolved = toApiAssetUrl(data.imageUrl)
+          setCocktailImageUrl(resolved)
+          localStorage.setItem(cacheKey, resolved)
         }
       })
       .catch((err) => {
@@ -376,16 +377,20 @@ function CustomerTasteProfile() {
         name: displayCocktail.name,
         section: 'recommendation',
         price: 0,
+        ingredients: Array.isArray(displayCocktail.ingredients) ? displayCocktail.ingredients : [],
       })
       const num = data.order?.orderNumber || ''
-      setOrderMsg(num ? `Order placed — ${num}` : 'Order placed.')
+      const msg = data?.notRecorded
+        ? (data.message || 'Mobile preview only. Not added to order history.')
+        : (num ? `Order placed — ${num}` : 'Order placed.')
+      setOrderMsg(msg)
       setPrintModalOpen(true)
     } catch (e) {
       setOrderMsg(e.message || 'Could not place order')
     } finally {
       setOrderLoading(false)
     }
-  }, [displayCocktail.name])
+  }, [displayCocktail.ingredients, displayCocktail.name])
 
   const quoteLine = selectedQuote || FAMOUS_QUOTES[0]
   const ingredientsLine = buildIngredientsLine(displayCocktail.ingredients)

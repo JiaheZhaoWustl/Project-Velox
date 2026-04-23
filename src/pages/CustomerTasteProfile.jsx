@@ -1,9 +1,12 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import CustomerLayout from '../components/CustomerLayout'
 import TasteProfileSliderRow from '../components/TasteProfileSliderRow'
 import { AROMAS, FEELINGS, AXIS_INFO } from '../constants/tasteProfile'
+import { FAMOUS_QUOTES } from '../constants/famousQuotes'
 import { useTasteProfileActions } from '../hooks/useTasteProfile'
 import { useCustomerTasteProfilePage } from '../hooks/useCustomerTasteProfilePage'
+import { toPng } from 'html-to-image'
+import CocktailPrintCard from '../components/CocktailPrintCard'
 import {
   MOCK_COCKTAIL,
   buildDisplayCocktail,
@@ -12,6 +15,7 @@ import { customerApi, cocktailImageApi } from '../services/api'
 import { getCustomerPhoneDisplay } from '../utils/customerSession'
 
 function CustomerTasteProfile() {
+  const printCardRef = useRef(null)
   const {
     preferences,
     savePreferences,
@@ -53,6 +57,11 @@ function CustomerTasteProfile() {
   const [cocktailImageUrl, setCocktailImageUrl] = useState(null)
   const [imageLoading, setImageLoading] = useState(false)
   const [imageError, setImageError] = useState(null)
+  const [orderLoading, setOrderLoading] = useState(false)
+  const [orderMsg, setOrderMsg] = useState(null)
+  const [printModalOpen, setPrintModalOpen] = useState(false)
+  const [downloadLoading, setDownloadLoading] = useState(false)
+  const [selectedQuote, setSelectedQuote] = useState('')
 
   const topRecs = recommendations?.top_recommendations || []
   const hasRecs = topRecs.length > 0
@@ -130,6 +139,272 @@ function CustomerTasteProfile() {
       setSaveMsg(e.message || 'Could not save')
     }
   }, [currentRec])
+
+  const pickFamousQuoteNoRepeat = useCallback((seedText) => {
+    const source = String(seedText || 'velox')
+    const hash = source
+      .split('')
+      .reduce((acc, ch) => (acc * 31 + ch.charCodeAt(0)) >>> 0, 7)
+    const quotes = FAMOUS_QUOTES
+    const startIndex = hash % quotes.length
+    const storageKey = 'velox_recent_quotes'
+    let recent = []
+    try {
+      recent = JSON.parse(localStorage.getItem(storageKey) || '[]')
+      if (!Array.isArray(recent)) recent = []
+    } catch {
+      recent = []
+    }
+
+    let picked = ''
+    for (let offset = 0; offset < quotes.length; offset += 1) {
+      const candidate = quotes[(startIndex + offset) % quotes.length]
+      if (!recent.includes(candidate)) {
+        picked = candidate
+        break
+      }
+    }
+
+    if (!picked) {
+      picked = quotes[startIndex]
+      recent = []
+    }
+
+    const keep = Math.max(quotes.length - 1, 1)
+    const nextRecent = [...recent, picked].slice(-keep)
+    localStorage.setItem(storageKey, JSON.stringify(nextRecent))
+    return picked
+  }, [])
+
+  const estimateOneLineWidth = useCallback((text, fontSize, letterSpacingEm = 0) => {
+    const raw = String(text || '').trim()
+    if (!raw) return 0
+    const estimatedUnits = raw.split('').reduce((sum, char) => {
+      if (char === ' ') return sum + 0.32
+      if (char === '“' || char === '”' || char === '"' || char === '\'') return sum + 0.3
+      if ('ilIjtfr'.includes(char)) return sum + 0.46
+      if ('ABCDEFGHKNOPQRSTUVXYZ'.includes(char)) return sum + 0.78
+      if ('mwMW@%&QO'.includes(char)) return sum + 0.92
+      if (/[0-9]/.test(char)) return sum + 0.62
+      return sum + 0.64
+    }, 0)
+    const spacing = Math.max(raw.length - 1, 0) * fontSize * letterSpacingEm
+    return estimatedUnits * fontSize + spacing
+  }, [])
+
+  const fitOneLineFontSize = useCallback((text, { max, min, maxWidth, letterSpacingEm = 0 }) => {
+    const raw = String(text || '').trim()
+    if (!raw) return max
+    for (let size = max; size >= min; size -= 1) {
+      if (estimateOneLineWidth(raw, size, letterSpacingEm) <= maxWidth) return size
+    }
+    return min
+  }, [estimateOneLineWidth])
+
+  const fitTwoLineFontSize = useCallback((text, { max, min, maxWidth, letterSpacingEm = 0 }) => {
+    const raw = String(text || '').trim()
+    if (!raw) return max
+    for (let size = max; size >= min; size -= 1) {
+      if (estimateOneLineWidth(raw, size, letterSpacingEm) <= maxWidth * 2) return size
+    }
+    return min
+  }, [estimateOneLineWidth])
+
+  const getTitleLetterSpacing = useCallback((name) => {
+    const len = String(name || '').trim().length
+    if (len > 26) return 0.005
+    if (len > 20) return 0.012
+    if (len > 15) return 0.02
+    return 0.05
+  }, [])
+
+  const fitParagraphFontSize = useCallback((text, { max, min, softLimit }) => {
+    const raw = String(text || '').trim()
+    if (!raw) return max
+    const ratio = softLimit / Math.max(raw.length, 1)
+    const next = Math.floor(max * Math.min(1, Math.max(0.5, ratio)))
+    return Math.max(min, Math.min(max, next))
+  }, [])
+
+  const shortenIngredient = useCallback((ingredient) => {
+    if (!ingredient) return ''
+    return String(ingredient)
+      .replace(/\s*\([^)]*\)\s*/g, ' ')
+      .replace(/\bounces?\b/gi, 'oz')
+      .replace(/\bmilliliters?\b/gi, 'ml')
+      .replace(/\bdrops?\b/gi, 'dashes')
+      .replace(/\btablespoons?\b/gi, 'tbsp')
+      .replace(/\bteaspoons?\b/gi, 'tsp')
+      .replace(/\bfresh\b/gi, '')
+      .replace(/\b(optional|to taste)\b/gi, '')
+      .replace(/^\s*\d+(?:\s+\d+)?(?:[./\-]\d+)?\s*(?:oz|ml|cl|l|g|kg|dashes?|tbsp|tsp|parts?|pinch(?:es)?|sprigs?|slices?|cubes?|pieces?|barspoons?)?\s*/i, '')
+      .replace(/\b\d+(?:[./\-]\d+)?\b/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+  }, [])
+
+  const buildIngredientsLine = useCallback((ingredients) => {
+    const compact = (ingredients || [])
+      .map(shortenIngredient)
+      .filter(Boolean)
+    if (compact.length === 0) return 'See bartender for house build.'
+    return compact.join(' | ')
+  }, [shortenIngredient])
+
+  const shortenStep = useCallback((step) => {
+    if (!step) return ''
+    const source = String(step)
+      .replace(/^\s*\d+[\)\.\-:\s]+/, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+    const lowered = source.toLowerCase()
+    let compact = source
+    if (lowered.includes('rinse') && lowered.includes('absinthe')) compact = 'Rinse with absinthe, discard'
+    else if (lowered.includes('rinse')) compact = 'Rinse glass, discard'
+    else if (lowered.includes('muddle')) compact = source
+    else if (lowered.includes('stir') && lowered.includes('ice')) compact = 'Stir with ice until chilled'
+    else if (lowered.includes('shake') && lowered.includes('ice')) compact = 'Shake with ice until chilled'
+    else if (lowered.includes('strain') && lowered.includes('glass')) compact = 'Strain into serving glass'
+    else if (lowered.includes('strain')) compact = 'Strain'
+    else if (lowered.includes('express') && lowered.includes('peel')) compact = 'Express peel over drink, discard'
+    else if (lowered.includes('garnish')) compact = 'Garnish and serve'
+    else if (lowered.includes('top with')) compact = source
+    else if (lowered.includes('combine') && lowered.includes('ice')) compact = 'Combine with ice'
+    compact = compact
+      .replace(/\s+/g, ' ')
+      .replace(/\bfor\s+\d+\s*seconds?\b/gi, '')
+      .replace(/\s*\([^)]*\)\s*/g, ' ')
+      .replace(/\.$/, '')
+      .trim()
+    return compact
+  }, [])
+
+  const buildConciseSteps = useCallback((steps, maxTotalLength) => {
+    const concise = (steps || []).map(shortenStep).filter(Boolean).slice(0, 5)
+    const fallback = ['Stir with ice until chilled', 'Strain into serving glass', 'Garnish and serve']
+    const picked = concise.length > 0 ? concise : fallback
+    const safeMax = Math.max(64, (maxTotalLength || 120) + 20)
+    const separatorCost = Math.max(picked.length - 1, 0) * 2
+    const textBudget = Math.max(safeMax - separatorCost, 40)
+    const perStepBudget = Math.max(12, Math.floor(textBudget / picked.length))
+
+    const compactToBudget = (text, budget) => {
+      if (text.length <= budget) return text
+      const trimmed = text
+        .replace(/\b(until chilled|very cold)\b/gi, 'chilled')
+        .replace(/\b(serving|prepared)\s+glass\b/gi, 'glass')
+        .replace(/\bwith\s+ice\b/gi, 'on ice')
+        .replace(/\binto\b/gi, 'to')
+        .replace(/\s+/g, ' ')
+        .trim()
+      if (trimmed.length <= budget) return trimmed
+      const words = trimmed.split(' ')
+      let out = ''
+      for (const word of words) {
+        const next = out ? `${out} ${word}` : word
+        if (next.length > budget) break
+        out = next
+      }
+      return out || words[0]
+    }
+
+    let result = picked.map((step) => compactToBudget(step, perStepBudget))
+    let total = result.join('  ').length
+
+    // If still over budget, tighten longest steps iteratively so later steps remain visible.
+    while (total > safeMax) {
+      let idx = -1
+      for (let i = 0; i < result.length; i += 1) {
+        if (idx === -1 || result[i].length > result[idx].length) idx = i
+      }
+      if (idx === -1 || result[idx].length <= 10) break
+      result[idx] = compactToBudget(result[idx], result[idx].length - 1)
+      total = result.join('  ').length
+    }
+
+    return result.filter(Boolean)
+  }, [shortenStep])
+
+  const ensureFontsLoaded = useCallback(async () => {
+    if (document.fonts && document.fonts.ready) {
+      await document.fonts.ready
+    }
+  }, [])
+
+  const downloadPrintCard = useCallback(async () => {
+    if (!printCardRef.current) return
+    setDownloadLoading(true)
+    try {
+      await ensureFontsLoaded()
+      const node = printCardRef.current
+      const exportWidth = Math.ceil(node.offsetWidth)
+      const exportHeight = Math.ceil(node.offsetHeight)
+      const exportScale = 8
+      const dataUrl = await toPng(printCardRef.current, {
+        pixelRatio: 1,
+        width: exportWidth,
+        height: exportHeight,
+        canvasWidth: exportWidth * exportScale,
+        canvasHeight: exportHeight * exportScale,
+        cacheBust: true,
+        backgroundColor: '#ffffff',
+      })
+      const safeName = (displayCocktail.name || 'cocktail')
+        .replace(/[^a-z0-9]+/gi, '-')
+        .replace(/^-+|-+$/g, '')
+        .toLowerCase()
+      const anchor = document.createElement('a')
+      anchor.href = dataUrl
+      anchor.download = `${safeName || 'cocktail'}-2x3-card.png`
+      anchor.click()
+    } catch (error) {
+      setOrderMsg(error.message || 'Could not generate PNG')
+    } finally {
+      setDownloadLoading(false)
+    }
+  }, [displayCocktail.name, ensureFontsLoaded])
+
+  useEffect(() => {
+    setSelectedQuote(pickFamousQuoteNoRepeat(currentRec?.recipe_name || displayCocktail.name))
+  }, [currentRec?.recipe_id, currentRec?.recipe_name, displayCocktail.name, pickFamousQuoteNoRepeat])
+
+  const handleOrder = useCallback(async () => {
+    setOrderMsg(null)
+    setOrderLoading(true)
+    try {
+      const data = await customerApi.placeOrder({
+        name: displayCocktail.name,
+        section: 'recommendation',
+        price: 0,
+      })
+      const num = data.order?.orderNumber || ''
+      setOrderMsg(num ? `Order placed — ${num}` : 'Order placed.')
+      setPrintModalOpen(true)
+    } catch (e) {
+      setOrderMsg(e.message || 'Could not place order')
+    } finally {
+      setOrderLoading(false)
+    }
+  }, [displayCocktail.name])
+
+  const quoteLine = selectedQuote || FAMOUS_QUOTES[0]
+  const ingredientsLine = buildIngredientsLine(displayCocktail.ingredients)
+  const titleLetterSpacing = getTitleLetterSpacing(displayCocktail.name)
+  const titleFontSize = fitTwoLineFontSize(displayCocktail.name, {
+    max: 66,
+    min: 14,
+    maxWidth: 548,
+    letterSpacingEm: titleLetterSpacing,
+  })
+  const quoteFontSize = fitTwoLineFontSize(quoteLine, {
+    max: 34,
+    min: 20,
+    maxWidth: 510,
+    letterSpacingEm: 0,
+  })
+  const quoteLetterSpacing = 0
+  const ingredientsFittedFontSize = fitParagraphFontSize(ingredientsLine, { max: 22, min: 11, softLimit: 210 })
+  const ingredientsFontSize = ingredientsFittedFontSize
 
   const isRegistered = Boolean(getCustomerPhoneDisplay())
 
@@ -222,7 +497,17 @@ function CustomerTasteProfile() {
                   onError={handleImageError}
                 />
               ) : imageLoading ? (
-                <span className="taste-profile-image-loading">Generating image…</span>
+                <div className="taste-profile-image-loading" role="status" aria-live="polite">
+                  <span className="taste-profile-image-spinner" aria-hidden="true" />
+                  <span className="taste-profile-image-loading-text">
+                    Generating cocktail
+                    <span className="taste-profile-loading-dots" aria-hidden="true">
+                      <span />
+                      <span />
+                      <span />
+                    </span>
+                  </span>
+                </div>
               ) : imageError ? (
                 <div className="taste-profile-image-error">
                   <span>{imageError}</span>
@@ -273,8 +558,8 @@ function CustomerTasteProfile() {
             )}
             <p className="taste-profile-cocktail-desc">{displayCocktail.description}</p>
             <div className="taste-profile-actions">
-              <button type="button" className="tp-btn tp-btn--primary">
-                Order
+              <button type="button" className="tp-btn tp-btn--primary" onClick={handleOrder} disabled={orderLoading}>
+                {orderLoading ? 'Ordering…' : 'Order'}
               </button>
               {hasRecs && topRecs.length > 1 ? (
                 <button
@@ -290,6 +575,7 @@ function CustomerTasteProfile() {
                 </button>
               )}
             </div>
+            {orderMsg && <p className="taste-profile-save-msg">{orderMsg}</p>}
           </div>
           {hasRecs && topRecs.length > 1 && (
             <div className="taste-profile-rec-list">
@@ -385,7 +671,7 @@ function CustomerTasteProfile() {
           <section className="taste-profile-section">
             <h3 className="taste-profile-section-title">Mouthfeel</h3>
             <TasteProfileSliderRow
-              label="Rough vs. smooth"
+              label="Rough ←→ smooth"
               value={preferences.mouthfeelRoughSmooth ?? 5}
               onChange={(v) => savePreferences({ ...preferences, mouthfeelRoughSmooth: v })}
               lowLabel="Rough"
@@ -393,7 +679,7 @@ function CustomerTasteProfile() {
               info={AXIS_INFO.mouthfeelRoughSmooth}
             />
             <TasteProfileSliderRow
-              label="Crisp vs. dense"
+              label="Crisp ←→ dense"
               value={preferences.mouthfeelCrispDense ?? 5}
               onChange={(v) => savePreferences({ ...preferences, mouthfeelCrispDense: v })}
               lowLabel="Crisp"
@@ -401,7 +687,7 @@ function CustomerTasteProfile() {
               info={AXIS_INFO.mouthfeelCrispDense}
             />
             <TasteProfileSliderRow
-              label="Flat vs. sparkling"
+              label="Flat ←→ sparkling"
               value={preferences.mouthfeelFlatSparkling ?? 5}
               onChange={(v) => savePreferences({ ...preferences, mouthfeelFlatSparkling: v })}
               lowLabel="Flat"
@@ -409,7 +695,7 @@ function CustomerTasteProfile() {
               info={AXIS_INFO.mouthfeelFlatSparkling}
             />
             <TasteProfileSliderRow
-              label="Clear vs. creamy"
+              label="Clear ←→ creamy"
               value={preferences.mouthfeelClearCreamy ?? 5}
               onChange={(v) => savePreferences({ ...preferences, mouthfeelClearCreamy: v })}
               lowLabel="Clear"
@@ -485,6 +771,48 @@ function CustomerTasteProfile() {
           </div>
         </div>
       </div>
+      {printModalOpen && (
+        <div className="print-card-modal-backdrop" role="presentation" onClick={() => setPrintModalOpen(false)}>
+          <div
+            className="print-card-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Printable cocktail card preview"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="print-card-modal-header">
+              <h3>2x3 Print Card Preview</h3>
+              <button type="button" className="print-card-modal-close" onClick={() => setPrintModalOpen(false)} aria-label="Close">
+                ×
+              </button>
+            </div>
+            <div className="print-card-modal-body">
+              <div className="print-card-preview-scale">
+                <CocktailPrintCard
+                  ref={printCardRef}
+                  name={displayCocktail.name}
+                  imageUrl={cocktailImageUrl}
+                  quote={quoteLine}
+                  ingredientsLine={ingredientsLine}
+                  titleFontSize={titleFontSize}
+                  titleLetterSpacing={titleLetterSpacing}
+                  quoteFontSize={quoteFontSize}
+                  quoteLetterSpacing={quoteLetterSpacing}
+                  ingredientsFontSize={ingredientsFontSize}
+                />
+              </div>
+            </div>
+            <div className="print-card-modal-actions">
+              <button type="button" className="tp-btn tp-btn--secondary" onClick={() => setPrintModalOpen(false)}>
+                Close
+              </button>
+              <button type="button" className="tp-btn tp-btn--primary" onClick={downloadPrintCard} disabled={downloadLoading}>
+                {downloadLoading ? 'Generating PNG…' : 'Download PNG'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </CustomerLayout>
   )
 }

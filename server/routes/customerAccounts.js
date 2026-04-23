@@ -121,6 +121,17 @@ router.post('/orders/demo', requireAccount, (req, res) => {
   }
 })
 
+/** Remove every order on this account */
+router.delete('/orders', requireAccount, (req, res) => {
+  try {
+    const cleared = store.clearOrders(req.phoneKey)
+    if (cleared == null) return res.status(404).json({ success: false, error: 'Account not found' })
+    res.json({ success: true, cleared })
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message })
+  }
+})
+
 /** Place order from menu item (name + price); mock kitchen flow */
 router.post('/orders', requireAccount, (req, res) => {
   try {

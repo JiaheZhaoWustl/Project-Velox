@@ -13,6 +13,7 @@ import CustomerMenu from './pages/CustomerMenu'
 import CustomerTasteProfile from './pages/CustomerTasteProfile'
 import CustomerCollection from './pages/CustomerCollection'
 import CustomerOrderHistory from './pages/CustomerOrderHistory'
+import SplashScreen from './pages/SplashScreen'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -108,8 +109,8 @@ function App() {
         <Route path="/customer/collection" element={<CustomerCollection />} />
         <Route path="/customer/order-history" element={<CustomerOrderHistory />} />
 
-        {/* Default: go to unified login */}
-        <Route path="/" element={<Navigate to="/customer" replace />} />
+        {/* Splash → unified login */}
+        <Route path="/" element={<SplashScreen />} />
       </Routes>
     </Router>
   )

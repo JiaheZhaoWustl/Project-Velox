@@ -54,12 +54,7 @@ function Layout({ children, onLogout }) {
     <div className="main-screen main-screen--hf">
       <aside className="app-sidebar app-sidebar--hf">
         <div className="sidebar-brand">
-          <div className="sidebar-logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-            </svg>
-          </div>
-          <span className="sidebar-brand-text">Project Velox</span>
+          <span className="sidebar-brand-text">PRoJECT VELoX</span>
         </div>
         <nav className="sidebar-nav">
           {navItems.map(({ path, label, Icon }) => (

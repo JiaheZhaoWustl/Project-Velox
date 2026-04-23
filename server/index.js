@@ -33,11 +33,26 @@ app.use('/api/customers', customerAccountsRouter)
 // POST /api/recommendations — GPT cocktail recommendations
 app.post('/api/recommendations', async (req, res) => {
   try {
-    let customerProfile = req.body?.customer_taste_profile ?? req.body
+    const directProfile = req.body?.customer_taste_profile
     const profileId = req.body?.profile_id
+    let customerProfile = directProfile
+
+    // If client passes only profile_id (onboarding flow), resolve the stored profile.
     if (profileId && (!customerProfile || Object.keys(customerProfile).length === 0)) {
       const stored = getTasteProfileById(profileId)
       if (stored) customerProfile = stored
+    }
+
+    // Backward compatibility: allow posting the profile object at top level.
+    if (!customerProfile || Object.keys(customerProfile).length === 0) {
+      const topLevel = req.body
+      if (topLevel && typeof topLevel === 'object' && !topLevel.profile_id) {
+        customerProfile = topLevel
+      }
+    }
+
+    if (!customerProfile || typeof customerProfile !== 'object') {
+      return res.status(400).json({ success: false, error: 'Missing customer taste profile' })
     }
 
     const { recommendations } = await getRecommendations(customerProfile, process.env.OPENAI_API_KEY)

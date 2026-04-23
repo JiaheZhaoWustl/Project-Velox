@@ -7,6 +7,8 @@ function CustomerOrderHistory() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [demoLoading, setDemoLoading] = useState(false)
+  const [clearing, setClearing] = useState(false)
+  const [confirmClear, setConfirmClear] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -39,20 +41,57 @@ function CustomerOrderHistory() {
     }
   }
 
+  const clearAll = async () => {
+    if (!confirmClear) {
+      setConfirmClear(true)
+      return
+    }
+    setClearing(true)
+    setError(null)
+    try {
+      await customerApi.clearOrders()
+      setOrders([])
+      setConfirmClear(false)
+    } catch (err) {
+      setError(err.message || 'Failed')
+    } finally {
+      setClearing(false)
+    }
+  }
+
   return (
     <CustomerLayout>
       <div className="customer-order-history-page">
         <div className="customer-order-head">
           <h2 className="customer-page-title">Orders</h2>
           <p className="customer-page-muted customer-order-disclaimer">Demo data — not a live POS.</p>
-          <button
-            type="button"
-            className="customer-order-demo-btn"
-            onClick={addDemo}
-            disabled={demoLoading}
-          >
-            {demoLoading ? '…' : 'Simulate order'}
-          </button>
+          <div className="customer-order-actions">
+            <button
+              type="button"
+              className="customer-order-demo-btn"
+              onClick={addDemo}
+              disabled={demoLoading || clearing}
+            >
+              {demoLoading ? '…' : 'Simulate order'}
+            </button>
+            <button
+              type="button"
+              className={`customer-order-clear-btn${confirmClear ? ' customer-order-clear-btn--confirm' : ''}`}
+              onClick={clearAll}
+              disabled={clearing || demoLoading || orders.length === 0}
+            >
+              {clearing ? '…' : confirmClear ? 'Confirm clear' : 'Clear all'}
+            </button>
+            {confirmClear && !clearing && (
+              <button
+                type="button"
+                className="customer-order-cancel-btn"
+                onClick={() => setConfirmClear(false)}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
         </div>
 
         {loading && <p className="customer-page-muted">Loading…</p>}

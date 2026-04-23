@@ -200,6 +200,21 @@ function addDemoOrder(phoneKey) {
 }
 
 /**
+ * Remove every order from the account.
+ * @returns {number|null} number of orders cleared, or null if account missing.
+ */
+function clearOrders(phoneKey) {
+  const acc = getAccount(phoneKey)
+  if (!acc) return null
+  const cleared = acc.orders.length
+  if (cleared === 0) return 0
+  acc.orders = []
+  acc.updatedAt = new Date().toISOString()
+  saveDb()
+  return cleared
+}
+
+/**
  * Place one line-item order from menu (mock POS).
  * @param {{ name: string, price?: number, section?: string }} payload
  */
@@ -238,5 +253,6 @@ module.exports = {
   setTasteProfileId,
   addDemoOrder,
   addMenuOrder,
+  clearOrders,
   CUSTOMERS_DB_PATH,
 }

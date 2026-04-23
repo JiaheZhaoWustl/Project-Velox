@@ -105,6 +105,7 @@ export const customerApi = {
     request(`/customers/collection/${encodeURIComponent(itemId)}`, { method: 'DELETE' }),
   getOrders: () => request('/customers/orders'),
   addDemoOrder: () => request('/customers/orders/demo', { method: 'POST' }),
+  clearOrders: () => request('/customers/orders', { method: 'DELETE' }),
   /** Place order from menu (mock POS) */
   placeOrder: (body) =>
     request('/customers/orders', { method: 'POST', body: JSON.stringify(body) }),

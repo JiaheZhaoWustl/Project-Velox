@@ -43,10 +43,10 @@ export const AXIS_INFO = {
   saltiness: 'A savory, mineral edge — like a salted rim or olive brine.',
   umami: 'Deep, savory richness — think tomato juice, miso, or aged spirits.',
   strength: 'How boozy you want your drink — from a light spritz to a spirit-forward sipper.',
-  mouthfeelRoughSmooth: 'Texture on the palate: rough/astringent (like tannins in tea) vs. silky-smooth.',
-  mouthfeelCrispDense: 'Body weight: crisp and thin (like soda water) vs. dense and full (like a milkshake).',
-  mouthfeelFlatSparkling: 'Carbonation level: still and calm vs. fizzy and effervescent.',
-  mouthfeelClearCreamy: 'Clarity vs. richness: a clear, clean pour vs. a thick, creamy consistency.',
+  mouthfeelRoughSmooth: 'Texture on the palate: rough/astringent (like tannins in tea) ←→ silky-smooth.',
+  mouthfeelCrispDense: 'Body weight: crisp and thin (like soda water) ←→ dense and full (like a milkshake).',
+  mouthfeelFlatSparkling: 'Carbonation level: still and calm ←→ fizzy and effervescent.',
+  mouthfeelClearCreamy: 'Clarity ←→ richness: a clear, clean pour ←→ a thick, creamy consistency.',
   adventurous: 'Stick with crowd-pleasing classics, or explore unusual ingredients and techniques.',
 }
 

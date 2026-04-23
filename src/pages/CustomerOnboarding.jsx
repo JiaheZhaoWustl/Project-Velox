@@ -305,7 +305,7 @@ function CustomerOnboarding() {
           <h2 className="onboarding-title">Mouthfeel</h2>
           <div className="onboarding-form">
             <div className="onboarding-field">
-              <AxisLabel text="Rough vs. Smooth" info={AXIS_INFO.mouthfeelRoughSmooth} />
+              <AxisLabel text="Rough ←→ Smooth" info={AXIS_INFO.mouthfeelRoughSmooth} />
               <SliderInput
                 value={preferences.mouthfeelRoughSmooth}
                 onChange={(v) => setPreferences((p) => ({ ...p, mouthfeelRoughSmooth: v }))}
@@ -313,7 +313,7 @@ function CustomerOnboarding() {
               />
             </div>
             <div className="onboarding-field">
-              <AxisLabel text="Crisp vs. Dense" info={AXIS_INFO.mouthfeelCrispDense} />
+              <AxisLabel text="Crisp ←→ Dense" info={AXIS_INFO.mouthfeelCrispDense} />
               <SliderInput
                 value={preferences.mouthfeelCrispDense}
                 onChange={(v) => setPreferences((p) => ({ ...p, mouthfeelCrispDense: v }))}
@@ -321,7 +321,7 @@ function CustomerOnboarding() {
               />
             </div>
             <div className="onboarding-field">
-              <AxisLabel text="Flat vs. Sparkling" info={AXIS_INFO.mouthfeelFlatSparkling} />
+              <AxisLabel text="Flat ←→ Sparkling" info={AXIS_INFO.mouthfeelFlatSparkling} />
               <SliderInput
                 value={preferences.mouthfeelFlatSparkling}
                 onChange={(v) => setPreferences((p) => ({ ...p, mouthfeelFlatSparkling: v }))}
@@ -329,7 +329,7 @@ function CustomerOnboarding() {
               />
             </div>
             <div className="onboarding-field">
-              <AxisLabel text="Clear vs. Creamy" info={AXIS_INFO.mouthfeelClearCreamy} />
+              <AxisLabel text="Clear ←→ Creamy" info={AXIS_INFO.mouthfeelClearCreamy} />
               <SliderInput
                 value={preferences.mouthfeelClearCreamy}
                 onChange={(v) => setPreferences((p) => ({ ...p, mouthfeelClearCreamy: v }))}

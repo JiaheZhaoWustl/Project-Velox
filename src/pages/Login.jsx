@@ -60,7 +60,7 @@ function Login({ onLogin }) {
         <div className="login-panel">
           <div className="login-content">
             <h1 className="welcome-title">
-              Project Velox — staff
+              PRoJECT VELoX — staff
             </h1>
             <p className="welcome-subtitle">
               Sign in to manage inventory, menu, and sales.

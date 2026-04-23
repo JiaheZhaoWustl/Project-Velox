@@ -34,7 +34,7 @@ function CustomerLayout({ children, variant = 'full' }) {
       <div className="customer-layout">
         <header className="customer-header">
           <Link to="/customer" className="customer-brand">
-            <span>Project Velox</span>
+            <span className="customer-brand-text">PRoJECT VELoX</span>
           </Link>
         </header>
         <main className="customer-main">{children}</main>
@@ -47,7 +47,7 @@ function CustomerLayout({ children, variant = 'full' }) {
       <header className="customer-header customer-header--nav">
         <div className="customer-header-left">
           <Link to="/customer/taste-profile" className="customer-brand">
-            <span className="customer-brand-text">Project Velox</span>
+            <span className="customer-brand-text">PRoJECT VELoX</span>
           </Link>
           <nav className="customer-nav">
             {CUSTOMER_NAV.map(({ path, label }) => (

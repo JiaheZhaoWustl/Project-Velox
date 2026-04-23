@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { combinePhoneForRegister } from '../utils/phone'
 import { clearGuestPhone } from '../utils/customerSession'
 import ApiService from '../services/ApiService'
@@ -15,7 +15,68 @@ function CustomerLogin({ onStaffLogin }) {
   const [showStaffLogin, setShowStaffLogin] = useState(false)
   const [staffError, setStaffError] = useState('')
   const [staffLoading, setStaffLoading] = useState(false)
+  const [handoffRect, setHandoffRect] = useState(null)
+  const [handoffActive, setHandoffActive] = useState(false)
+  const coverRef = useRef(null)
+  const location = useLocation()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const navEntry = performance.getEntriesByType('navigation')[0]
+    if (navEntry?.type === 'reload' && !location.state?.fromSplash) {
+      navigate('/', { replace: true })
+    }
+  }, [location.state, navigate])
+
+  useEffect(() => {
+    if (!location.state?.fromSplash) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    let rafId = null
+    let settleTimerId = null
+
+    const beginHandoff = () => {
+      setHandoffActive(false)
+      setHandoffRect({
+        top: 0,
+        left: 0,
+        width: window.innerWidth,
+        height: window.innerHeight
+      })
+
+      rafId = window.requestAnimationFrame(() => {
+        const target = coverRef.current?.getBoundingClientRect()
+        if (!target) {
+          setHandoffRect(null)
+          return
+        }
+
+        setHandoffActive(true)
+        setHandoffRect({
+          top: target.top,
+          left: target.left,
+          width: target.width,
+          height: target.height
+        })
+      })
+
+      settleTimerId = window.setTimeout(() => {
+        setHandoffRect(null)
+      }, 640)
+    }
+
+    if (coverRef.current?.complete) {
+      beginHandoff()
+    } else {
+      coverRef.current?.addEventListener('load', beginHandoff, { once: true })
+    }
+
+    return () => {
+      if (rafId) window.cancelAnimationFrame(rafId)
+      if (settleTimerId) window.clearTimeout(settleTimerId)
+      coverRef.current?.removeEventListener('load', beginHandoff)
+    }
+  }, [location.state])
 
   const handlePhoneContinue = (e) => {
     e.preventDefault()
@@ -169,12 +230,22 @@ function CustomerLogin({ onStaffLogin }) {
 
         <div className="customer-login-visual">
           <img
+            ref={coverRef}
             src={coverImage}
             alt="Cocktail artwork"
             className="customer-login-cover"
           />
         </div>
       </div>
+      {handoffRect && (
+        <div
+          className={`login-image-handoff${handoffActive ? ' login-image-handoff--active' : ''}`}
+          style={handoffRect}
+          aria-hidden="true"
+        >
+          <img src={coverImage} alt="" className="login-image-handoff__img" />
+        </div>
+      )}
     </div>
   )
 }

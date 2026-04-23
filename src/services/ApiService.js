@@ -1,6 +1,10 @@
 class ApiService {
   constructor() {
-    this.baseUrl = '/api'
+    const prodTunnelFallbackUrl = 'https://twenty-steaks-own.loca.lt'
+    const apiBaseUrl = String(
+      import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? prodTunnelFallbackUrl : ''),
+    ).trim().replace(/\/+$/, '')
+    this.baseUrl = apiBaseUrl ? `${apiBaseUrl}/api` : '/api'
     this.mockMode = true
   }
 

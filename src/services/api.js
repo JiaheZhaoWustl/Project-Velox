@@ -5,7 +5,10 @@
 
 import { customerAuthHeaders } from '../utils/customerSession'
 
-const API_BASE_URL = String(import.meta.env.VITE_API_BASE_URL || '').trim().replace(/\/+$/, '')
+const PROD_TUNNEL_FALLBACK_URL = 'https://twenty-steaks-own.loca.lt'
+const API_BASE_URL = String(
+  import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? PROD_TUNNEL_FALLBACK_URL : ''),
+).trim().replace(/\/+$/, '')
 const BASE = API_BASE_URL ? `${API_BASE_URL}/api` : '/api'
 
 export function toApiAssetUrl(url) {

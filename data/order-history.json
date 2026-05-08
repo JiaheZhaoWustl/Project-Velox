@@ -3,6 +3,181 @@
   "ordersByPhone": {
     "1": [
       {
+        "id": "ord_2a22d6e45cb455aa",
+        "orderNumber": "VX-37721",
+        "status": "Preparing",
+        "currency": "USD",
+        "summary": "Osmanthus Fizz (recommendation)",
+        "createdAt": "2026-04-23T23:55:29.626Z",
+        "items": [
+          {
+            "name": "Osmanthus Fizz",
+            "qty": 1,
+            "price": 0,
+            "ingredients": [
+              "55 ml Coconut Juice",
+              "45 ml Vita Lemon Sparkling Tea",
+              "15 ml Lime Juice",
+              "12 ml Osmanthus Honey Syrup (House-made)",
+              "Rock Ice (Cubed)",
+              "pinch Dried Osmanthus Flowers (garnish)"
+            ]
+          }
+        ],
+        "total": 0,
+        "fullAmount": 0
+      },
+      {
+        "id": "ord_2b84c72b081d7af8",
+        "orderNumber": "VX-68766",
+        "status": "Preparing",
+        "currency": "USD",
+        "summary": "Piña Colada (recommendation)",
+        "createdAt": "2026-04-23T23:38:24.422Z",
+        "items": [
+          {
+            "name": "Piña Colada",
+            "qty": 1,
+            "price": 0,
+            "ingredients": [
+              "45 ml white rum",
+              "90 ml coconut cream",
+              "60 ml pineapple juice",
+              "15 ml heavy cream",
+              "1 cup crushed ice"
+            ]
+          }
+        ],
+        "total": 0,
+        "fullAmount": 0
+      },
+      {
+        "id": "ord_ce90b30008583176",
+        "orderNumber": "VX-22760",
+        "status": "Preparing",
+        "currency": "USD",
+        "summary": "Plum Fizz (recommendation)",
+        "createdAt": "2026-04-23T23:29:34.859Z",
+        "items": [
+          {
+            "name": "Plum Fizz",
+            "qty": 1,
+            "price": 0,
+            "ingredients": [
+              "70 ml Pineapple Juice",
+              "45 ml Suanmeitang (Sour Plum Drink)",
+              "15 ml Lime Juice",
+              "2 dashes Saline Solution (House-made)",
+              "60 ml Sparkling Mineral Water",
+              "Rock Ice (Cubed)",
+              "Lime (garnish)"
+            ]
+          }
+        ],
+        "total": 0,
+        "fullAmount": 0
+      },
+      {
+        "id": "ord_7bd99aafc353532b",
+        "orderNumber": "VX-47018",
+        "status": "Preparing",
+        "currency": "USD",
+        "summary": "Plum Current (recommendation)",
+        "createdAt": "2026-04-23T23:06:57.554Z",
+        "items": [
+          {
+            "name": "Plum Current",
+            "qty": 1,
+            "price": 0,
+            "ingredients": [
+              "70 ml Suanmeitang (Sour Plum Drink)",
+              "45 ml Oolong Tea (Unsweetened)",
+              "12 ml Plum Syrup (House-made)",
+              "1 dash Saline Solution (House-made)",
+              "Rock Ice (Cubed)",
+              "Lime (garnish)"
+            ]
+          }
+        ],
+        "total": 0,
+        "fullAmount": 0
+      },
+      {
+        "id": "ord_280a7a9b7979ed97",
+        "orderNumber": "VX-14213",
+        "status": "Preparing",
+        "currency": "USD",
+        "summary": "Plum Pillow (recommendation)",
+        "createdAt": "2026-04-23T22:01:38.045Z",
+        "items": [
+          {
+            "name": "Plum Pillow",
+            "qty": 1,
+            "price": 0,
+            "ingredients": [
+              "60 ml Tianrun Kefir Drink",
+              "45 ml Suanmeitang (Sour Plum Drink)",
+              "10 ml Orange Juice",
+              "2 dashes Saline Solution (House-made)",
+              "Rock Ice (Cubed)",
+              "pinch Ceylon Cinnamon Powder"
+            ]
+          }
+        ],
+        "total": 0,
+        "fullAmount": 0
+      },
+      {
+        "id": "ord_1bad144576ece825",
+        "orderNumber": "VX-54084",
+        "status": "Preparing",
+        "currency": "USD",
+        "summary": "Plum Pillow (recommendation)",
+        "createdAt": "2026-04-23T22:01:15.911Z",
+        "items": [
+          {
+            "name": "Plum Pillow",
+            "qty": 1,
+            "price": 0,
+            "ingredients": [
+              "60 ml Tianrun Kefir Drink",
+              "45 ml Suanmeitang (Sour Plum Drink)",
+              "10 ml Orange Juice",
+              "2 dashes Saline Solution (House-made)",
+              "Rock Ice (Cubed)",
+              "pinch Ceylon Cinnamon Powder"
+            ]
+          }
+        ],
+        "total": 0,
+        "fullAmount": 0
+      },
+      {
+        "id": "ord_bc03916b08d297b4",
+        "orderNumber": "VX-90785",
+        "status": "Preparing",
+        "currency": "USD",
+        "summary": "Plum Lantern (recommendation)",
+        "createdAt": "2026-04-23T13:09:10.152Z",
+        "items": [
+          {
+            "name": "Plum Lantern",
+            "qty": 1,
+            "price": 0,
+            "ingredients": [
+              "90 ml Suanmeitang (Sour Plum Drink)",
+              "15 ml Osmanthus Honey Syrup (House-made)",
+              "2 dashes Saline Solution (House-made)",
+              "40 ml Sparkling Mineral Water",
+              "Rock Ice (Cubed)",
+              "pinch Dried Osmanthus Flowers (garnish)"
+            ]
+          }
+        ],
+        "total": 0,
+        "fullAmount": 0
+      },
+      {
         "id": "ord_50fe63bf7296f1bc",
         "orderNumber": "VX-51231",
         "status": "Preparing",
@@ -48,6 +223,601 @@
         ],
         "total": 0,
         "fullAmount": 0
+      }
+    ],
+    "113464009594": [
+      {
+        "id": "ord_a468a34e732021f1",
+        "orderNumber": "VX-19669",
+        "status": "Preparing",
+        "currency": "USD",
+        "summary": "French 75 (recommendation)",
+        "createdAt": "2026-04-23T13:39:20.498Z",
+        "items": [
+          {
+            "name": "French 75",
+            "qty": 1,
+            "price": 0,
+            "ingredients": [
+              "30 ml London Dry Gin",
+              "15 ml fresh lemon juice",
+              "10 ml simple syrup",
+              "60 ml Champagne"
+            ]
+          }
+        ],
+        "total": 0,
+        "fullAmount": 0
+      },
+      {
+        "id": "ord_ba903daa91a2aa17",
+        "orderNumber": "VX-1042",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Negroni, Old Fashioned",
+        "createdAt": "2026-03-28T13:37:00.325Z",
+        "items": [
+          {
+            "name": "Negroni",
+            "qty": 1,
+            "price": 14,
+            "ingredients": []
+          },
+          {
+            "name": "Old Fashioned",
+            "qty": 1,
+            "price": 10.5,
+            "ingredients": []
+          }
+        ],
+        "total": 24.5,
+        "fullAmount": 24.5
+      },
+      {
+        "id": "ord_d352b80f6ce906dc",
+        "orderNumber": "VX-1088",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Gimlet",
+        "createdAt": "2026-03-21T13:37:00.325Z",
+        "items": [
+          {
+            "name": "Gimlet",
+            "qty": 1,
+            "price": 12,
+            "ingredients": []
+          }
+        ],
+        "total": 12,
+        "fullAmount": 12
+      }
+    ],
+    "219541220914497": [
+      {
+        "id": "ord_9534ff272242c838",
+        "orderNumber": "VX-1042",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Negroni, Old Fashioned",
+        "createdAt": "2026-04-20T22:11:25.820Z",
+        "items": [
+          {
+            "name": "Negroni",
+            "qty": 1,
+            "price": 14,
+            "ingredients": []
+          },
+          {
+            "name": "Old Fashioned",
+            "qty": 1,
+            "price": 10.5,
+            "ingredients": []
+          }
+        ],
+        "total": 24.5,
+        "fullAmount": 24.5
+      },
+      {
+        "id": "ord_7e773e4e864fbffb",
+        "orderNumber": "VX-1088",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Gimlet",
+        "createdAt": "2026-04-13T22:11:25.820Z",
+        "items": [
+          {
+            "name": "Gimlet",
+            "qty": 1,
+            "price": 12,
+            "ingredients": []
+          }
+        ],
+        "total": 12,
+        "fullAmount": 12
+      }
+    ],
+    "857491699457782": [
+      {
+        "id": "ord_655f0dce37024d54",
+        "orderNumber": "VX-1042",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Negroni, Old Fashioned",
+        "createdAt": "2026-04-20T22:43:10.772Z",
+        "items": [
+          {
+            "name": "Negroni",
+            "qty": 1,
+            "price": 14,
+            "ingredients": []
+          },
+          {
+            "name": "Old Fashioned",
+            "qty": 1,
+            "price": 10.5,
+            "ingredients": []
+          }
+        ],
+        "total": 24.5,
+        "fullAmount": 24.5
+      },
+      {
+        "id": "ord_0974e54637478eac",
+        "orderNumber": "VX-1088",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Gimlet",
+        "createdAt": "2026-04-13T22:43:10.772Z",
+        "items": [
+          {
+            "name": "Gimlet",
+            "qty": 1,
+            "price": 12,
+            "ingredients": []
+          }
+        ],
+        "total": 12,
+        "fullAmount": 12
+      }
+    ],
+    "424902260874920": [
+      {
+        "id": "ord_1d383d33f5a9df03",
+        "orderNumber": "VX-1042",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Negroni, Old Fashioned",
+        "createdAt": "2026-04-20T22:46:15.930Z",
+        "items": [
+          {
+            "name": "Negroni",
+            "qty": 1,
+            "price": 14,
+            "ingredients": []
+          },
+          {
+            "name": "Old Fashioned",
+            "qty": 1,
+            "price": 10.5,
+            "ingredients": []
+          }
+        ],
+        "total": 24.5,
+        "fullAmount": 24.5
+      },
+      {
+        "id": "ord_5dfd74326b9401f6",
+        "orderNumber": "VX-1088",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Gimlet",
+        "createdAt": "2026-04-13T22:46:15.930Z",
+        "items": [
+          {
+            "name": "Gimlet",
+            "qty": 1,
+            "price": 12,
+            "ingredients": []
+          }
+        ],
+        "total": 12,
+        "fullAmount": 12
+      }
+    ],
+    "621706136609204": [
+      {
+        "id": "ord_e8841a26bd378f87",
+        "orderNumber": "VX-1042",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Negroni, Old Fashioned",
+        "createdAt": "2026-04-20T22:52:01.055Z",
+        "items": [
+          {
+            "name": "Negroni",
+            "qty": 1,
+            "price": 14,
+            "ingredients": []
+          },
+          {
+            "name": "Old Fashioned",
+            "qty": 1,
+            "price": 10.5,
+            "ingredients": []
+          }
+        ],
+        "total": 24.5,
+        "fullAmount": 24.5
+      },
+      {
+        "id": "ord_a0243cfbc05e61f3",
+        "orderNumber": "VX-1088",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Gimlet",
+        "createdAt": "2026-04-13T22:52:01.055Z",
+        "items": [
+          {
+            "name": "Gimlet",
+            "qty": 1,
+            "price": 12,
+            "ingredients": []
+          }
+        ],
+        "total": 12,
+        "fullAmount": 12
+      }
+    ],
+    "488487349411378": [
+      {
+        "id": "ord_41e643488e685392",
+        "orderNumber": "VX-1042",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Negroni, Old Fashioned",
+        "createdAt": "2026-04-20T22:52:25.167Z",
+        "items": [
+          {
+            "name": "Negroni",
+            "qty": 1,
+            "price": 14,
+            "ingredients": []
+          },
+          {
+            "name": "Old Fashioned",
+            "qty": 1,
+            "price": 10.5,
+            "ingredients": []
+          }
+        ],
+        "total": 24.5,
+        "fullAmount": 24.5
+      },
+      {
+        "id": "ord_29b9efabf93a85dc",
+        "orderNumber": "VX-1088",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Gimlet",
+        "createdAt": "2026-04-13T22:52:25.167Z",
+        "items": [
+          {
+            "name": "Gimlet",
+            "qty": 1,
+            "price": 12,
+            "ingredients": []
+          }
+        ],
+        "total": 12,
+        "fullAmount": 12
+      }
+    ],
+    "13143320704": [
+      {
+        "id": "ord_9265e4267720999b",
+        "orderNumber": "VX-1042",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Negroni, Old Fashioned",
+        "createdAt": "2026-04-20T22:58:01.565Z",
+        "items": [
+          {
+            "name": "Negroni",
+            "qty": 1,
+            "price": 14,
+            "ingredients": []
+          },
+          {
+            "name": "Old Fashioned",
+            "qty": 1,
+            "price": 10.5,
+            "ingredients": []
+          }
+        ],
+        "total": 24.5,
+        "fullAmount": 24.5
+      },
+      {
+        "id": "ord_585f755ebc4f8290",
+        "orderNumber": "VX-1088",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Gimlet",
+        "createdAt": "2026-04-13T22:58:01.565Z",
+        "items": [
+          {
+            "name": "Gimlet",
+            "qty": 1,
+            "price": 12,
+            "ingredients": []
+          }
+        ],
+        "total": 12,
+        "fullAmount": 12
+      }
+    ],
+    "852875145401080": [
+      {
+        "id": "ord_c54ae393025de2c0",
+        "orderNumber": "VX-1042",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Negroni, Old Fashioned",
+        "createdAt": "2026-04-20T23:03:04.974Z",
+        "items": [
+          {
+            "name": "Negroni",
+            "qty": 1,
+            "price": 14,
+            "ingredients": []
+          },
+          {
+            "name": "Old Fashioned",
+            "qty": 1,
+            "price": 10.5,
+            "ingredients": []
+          }
+        ],
+        "total": 24.5,
+        "fullAmount": 24.5
+      },
+      {
+        "id": "ord_feb2bb86009a235a",
+        "orderNumber": "VX-1088",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Gimlet",
+        "createdAt": "2026-04-13T23:03:04.974Z",
+        "items": [
+          {
+            "name": "Gimlet",
+            "qty": 1,
+            "price": 12,
+            "ingredients": []
+          }
+        ],
+        "total": 12,
+        "fullAmount": 12
+      }
+    ],
+    "857127377056645": [
+      {
+        "id": "ord_172cb94660f01306",
+        "orderNumber": "VX-1042",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Negroni, Old Fashioned",
+        "createdAt": "2026-04-20T23:05:38.245Z",
+        "items": [
+          {
+            "name": "Negroni",
+            "qty": 1,
+            "price": 14,
+            "ingredients": []
+          },
+          {
+            "name": "Old Fashioned",
+            "qty": 1,
+            "price": 10.5,
+            "ingredients": []
+          }
+        ],
+        "total": 24.5,
+        "fullAmount": 24.5
+      },
+      {
+        "id": "ord_ec0c3bcfd1f56549",
+        "orderNumber": "VX-1088",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Gimlet",
+        "createdAt": "2026-04-13T23:05:38.245Z",
+        "items": [
+          {
+            "name": "Gimlet",
+            "qty": 1,
+            "price": 12,
+            "ingredients": []
+          }
+        ],
+        "total": 12,
+        "fullAmount": 12
+      }
+    ],
+    "545679231159200": [
+      {
+        "id": "ord_a8e392cd4cc63ef9",
+        "orderNumber": "VX-1042",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Negroni, Old Fashioned",
+        "createdAt": "2026-04-20T23:16:25.121Z",
+        "items": [
+          {
+            "name": "Negroni",
+            "qty": 1,
+            "price": 14,
+            "ingredients": []
+          },
+          {
+            "name": "Old Fashioned",
+            "qty": 1,
+            "price": 10.5,
+            "ingredients": []
+          }
+        ],
+        "total": 24.5,
+        "fullAmount": 24.5
+      },
+      {
+        "id": "ord_ac36b516d95e31b5",
+        "orderNumber": "VX-1088",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Gimlet",
+        "createdAt": "2026-04-13T23:16:25.121Z",
+        "items": [
+          {
+            "name": "Gimlet",
+            "qty": 1,
+            "price": 12,
+            "ingredients": []
+          }
+        ],
+        "total": 12,
+        "fullAmount": 12
+      }
+    ],
+    "810158521025036": [
+      {
+        "id": "ord_b094d276b3d4c029",
+        "orderNumber": "VX-1042",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Negroni, Old Fashioned",
+        "createdAt": "2026-04-20T23:41:11.388Z",
+        "items": [
+          {
+            "name": "Negroni",
+            "qty": 1,
+            "price": 14,
+            "ingredients": []
+          },
+          {
+            "name": "Old Fashioned",
+            "qty": 1,
+            "price": 10.5,
+            "ingredients": []
+          }
+        ],
+        "total": 24.5,
+        "fullAmount": 24.5
+      },
+      {
+        "id": "ord_1870b6bf9041ef9b",
+        "orderNumber": "VX-1088",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Gimlet",
+        "createdAt": "2026-04-13T23:41:11.388Z",
+        "items": [
+          {
+            "name": "Gimlet",
+            "qty": 1,
+            "price": 12,
+            "ingredients": []
+          }
+        ],
+        "total": 12,
+        "fullAmount": 12
+      }
+    ],
+    "420185837390838": [
+      {
+        "id": "ord_486da64da61412a0",
+        "orderNumber": "VX-1042",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Negroni, Old Fashioned",
+        "createdAt": "2026-04-20T23:45:04.140Z",
+        "items": [
+          {
+            "name": "Negroni",
+            "qty": 1,
+            "price": 14,
+            "ingredients": []
+          },
+          {
+            "name": "Old Fashioned",
+            "qty": 1,
+            "price": 10.5,
+            "ingredients": []
+          }
+        ],
+        "total": 24.5,
+        "fullAmount": 24.5
+      },
+      {
+        "id": "ord_0c75731a363ca53e",
+        "orderNumber": "VX-1088",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Gimlet",
+        "createdAt": "2026-04-13T23:45:04.140Z",
+        "items": [
+          {
+            "name": "Gimlet",
+            "qty": 1,
+            "price": 12,
+            "ingredients": []
+          }
+        ],
+        "total": 12,
+        "fullAmount": 12
+      }
+    ],
+    "581824331539086": [
+      {
+        "id": "ord_ab95f1dcacf82fce",
+        "orderNumber": "VX-1042",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Negroni, Old Fashioned",
+        "createdAt": "2026-04-20T23:58:15.647Z",
+        "items": [
+          {
+            "name": "Negroni",
+            "qty": 1,
+            "price": 14,
+            "ingredients": []
+          },
+          {
+            "name": "Old Fashioned",
+            "qty": 1,
+            "price": 10.5,
+            "ingredients": []
+          }
+        ],
+        "total": 24.5,
+        "fullAmount": 24.5
+      },
+      {
+        "id": "ord_b5ddfeb7691db819",
+        "orderNumber": "VX-1088",
+        "status": "Complete",
+        "currency": "USD",
+        "summary": "Gimlet",
+        "createdAt": "2026-04-13T23:58:15.647Z",
+        "items": [
+          {
+            "name": "Gimlet",
+            "qty": 1,
+            "price": 12,
+            "ingredients": []
+          }
+        ],
+        "total": 12,
+        "fullAmount": 12
       }
     ]
   }

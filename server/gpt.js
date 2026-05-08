@@ -3,7 +3,12 @@
  */
 const path = require('path')
 const fs = require('fs')
+const XLSX = require('xlsx')
 const OpenAI = require('openai').default
+const { INVENTORY_DIR } = require('./config/paths')
+const { normalizeRow } = require('./utils/excelParser')
+const { getInventoryFilesInInventoryDir, resolveInventoryFile } = require('./utils/fileResolution')
+const { parseInventoryTextToRows } = require('./utils/inventoryTextParser')
 
 const PROJECT_ROOT = path.resolve(__dirname, '..')
 const DATA_DIR = path.join(PROJECT_ROOT, 'data')
@@ -12,7 +17,13 @@ const SYSTEM_PROMPT_PATH = path.join(DATA_DIR, 'velox_gpt_api_prompt.txt')
 const RECOMMENDATION_LOG_PATH = path.join(DATA_DIR, 'gpt_recommendation_log.jsonl')
 const IMAGE_PROMPT_PATH = path.join(DATA_DIR, 'cocktail_image_prompt.txt')
 const MOCKTAIL_PROMPT_PATH = path.join(DATA_DIR, 'velox_gpt_mocktail_prompt.txt')
-const INGREDIENTS_PATH = path.join(DATA_DIR, 'velox_ingredients.json')
+/**
+ * Authoritative pantry JSON: prefer the inventory/ folder so users can edit it
+ * outside of /data. Falls back to legacy /data/velox_ingredients.json.
+ */
+const INGREDIENTS_FILENAME = 'velox_ingredients.json'
+const INVENTORY_INGREDIENTS_PATH = path.join(INVENTORY_DIR, INGREDIENTS_FILENAME)
+const LEGACY_INGREDIENTS_PATH = path.join(DATA_DIR, INGREDIENTS_FILENAME)
 const GENERATED_IMAGES_DIR = path.join(PROJECT_ROOT, 'generated-images')
 const isVercelRuntime = process.env.VERCEL === '1'
 
@@ -32,15 +43,156 @@ function loadMocktailPrompt() {
   }
 }
 
-/** Load the pantry JSON used to constrain mocktail recipes to on-hand ingredients. */
-function loadIngredientsPantry() {
+function readIngredientsJson() {
+  for (const candidate of [INVENTORY_INGREDIENTS_PATH, LEGACY_INGREDIENTS_PATH]) {
+    try {
+      if (!fs.existsSync(candidate)) continue
+      const raw = fs.readFileSync(candidate, 'utf-8')
+      return { data: JSON.parse(raw), source: candidate }
+    } catch (e) {
+      console.warn('[GPT] Could not read pantry JSON at', candidate, '-', e.message)
+    }
+  }
+  return null
+}
+
+/**
+ * Build a pantry dictionary from any xlsx files in the inventory folder.
+ * Items are grouped by category (lowercased + snake_cased) so the structure
+ * looks similar to the curated velox_ingredients.json pantry.
+ */
+function buildPantryFromInventoryFolder() {
+  const files = getInventoryFilesInInventoryDir()
+  if (files.length === 0) return null
+
+  const target = resolveInventoryFile()
+  const file = (target && files.find((f) => f.path === target.path)) || files[0]
+
   try {
-    const raw = fs.readFileSync(INGREDIENTS_PATH, 'utf-8')
-    return JSON.parse(raw)
+    const ext = path.extname(file.path).toLowerCase()
+    let rawRows = []
+    if (ext === '.txt') {
+      const text = fs.readFileSync(file.path, 'utf-8')
+      rawRows = parseInventoryTextToRows(text)
+    } else {
+      const workbook = XLSX.readFile(file.path, { type: 'file' })
+      const sheetName =
+        workbook.SheetNames.find((n) => /^inventory$/i.test(n)) ||
+        workbook.SheetNames.find((n) => /inventory|ingredients|stock/i.test(n)) ||
+        workbook.SheetNames[0]
+      const sheet = workbook.Sheets[sheetName]
+      rawRows = XLSX.utils.sheet_to_json(sheet, { defval: '' })
+    }
+    if (!rawRows.length) return null
+
+    const items = rawRows
+      .map((row, i) => normalizeRow(row, i))
+      .filter((item) => item.name && item.name !== '—')
+
+    if (!items.length) return null
+
+    const ingredients = {}
+    for (const item of items) {
+      const groupKey = String(item.category || 'misc')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '_')
+        .replace(/^_|_$/g, '') || 'misc'
+      if (!ingredients[groupKey]) ingredients[groupKey] = []
+      const entry = {
+        id: String(item.name).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, ''),
+        name: item.name,
+      }
+      if (item.category && item.category !== '—') entry.category = item.category
+      if (typeof item.quantity === 'number' && item.quantity > 0) entry.on_hand = item.quantity
+      if (typeof item.unitPrice === 'number' && item.unitPrice > 0) entry.unit_price = item.unitPrice
+      ingredients[groupKey].push(entry)
+    }
+
+    return {
+      source_file: file.name,
+      ingredients,
+    }
   } catch (e) {
-    console.warn('[GPT] Could not load ingredients pantry:', e.message)
+    console.warn('[GPT] Could not parse inventory spreadsheet at', file.path, '-', e.message)
     return null
   }
+}
+
+function buildPantryFromInventoryTextFile() {
+  const txtFiles = getInventoryFilesInInventoryDir()
+    .filter((f) => path.extname(f.name).toLowerCase() === '.txt')
+    .sort((a, b) => b.mtime - a.mtime)
+
+  for (const file of txtFiles) {
+    try {
+      const text = fs.readFileSync(file.path, 'utf-8')
+      const rawRows = parseInventoryTextToRows(text)
+      if (!rawRows.length) continue
+
+      const items = rawRows
+        .map((row, i) => normalizeRow(row, i))
+        .filter((item) => item.name && item.name !== '—')
+      if (!items.length) continue
+
+      const ingredients = {}
+      for (const item of items) {
+        const groupKey = String(item.category || 'misc')
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '_')
+          .replace(/^_|_$/g, '') || 'misc'
+        if (!ingredients[groupKey]) ingredients[groupKey] = []
+        const entry = {
+          id: String(item.name).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, ''),
+          name: item.name,
+        }
+        if (item.category && item.category !== '—') entry.category = item.category
+        if (typeof item.quantity === 'number' && item.quantity > 0) entry.on_hand = item.quantity
+        if (typeof item.unitPrice === 'number' && item.unitPrice > 0) entry.unit_price = item.unitPrice
+        ingredients[groupKey].push(entry)
+      }
+
+      return {
+        source_file: file.name,
+        ingredients,
+      }
+    } catch (e) {
+      console.warn('[GPT] Could not parse inventory text file at', file.path, '-', e.message)
+    }
+  }
+  return null
+}
+
+/**
+ * Load the authoritative pantry the model must use. Resolution order:
+ *   1. inventory/velox_ingredients.json (curated pantry)
+ *   2. xlsx inventory files inside inventory/ (live inventory list)
+ *   3. legacy data/velox_ingredients.json
+ *
+ * Returns { data, source, fromInventoryFolder } or null when nothing is available.
+ */
+function loadIngredientsPantry() {
+  // Prefer simple TXT inventory pastes over JSON/XLSX.
+  const fromTxt = buildPantryFromInventoryTextFile()
+  if (fromTxt) {
+    return { data: fromTxt, source: path.join(INVENTORY_DIR, fromTxt.source_file), fromInventoryFolder: true }
+  }
+
+  const json = readIngredientsJson()
+  if (json && json.source === INVENTORY_INGREDIENTS_PATH) {
+    return { data: json.data, source: json.source, fromInventoryFolder: true }
+  }
+
+  const fromXlsx = buildPantryFromInventoryFolder()
+  if (fromXlsx) {
+    return { data: fromXlsx, source: path.join(INVENTORY_DIR, fromXlsx.source_file), fromInventoryFolder: true }
+  }
+
+  if (json) {
+    return { data: json.data, source: json.source, fromInventoryFolder: false }
+  }
+
+  console.warn('[GPT] Could not load ingredients pantry from any source.')
+  return null
 }
 
 function toSafeString(value) {
@@ -287,20 +439,27 @@ async function getRecommendations(customerProfile, apiKey, options = {}) {
   const promptSource = isMocktail ? MOCKTAIL_PROMPT_PATH : SYSTEM_PROMPT_PATH
   console.log('[GPT] Prompt loaded from:', promptSource, isMocktail ? '(MOCKTAIL)' : '')
 
-  // Mocktails are constrained to the Velox pantry. Inject the ingredient list
-  // into both the system prompt and user message so the model cannot drift.
-  const pantry = loadIngredientsPantry()
-  if (isMocktail) {
-    if (pantry) {
-      systemPrompt += `\n\nAVAILABLE INGREDIENTS (authoritative pantry — the only ingredients you may use):\n${JSON.stringify(
-        pantry,
-        null,
-        2
-      )}`
-      console.log('[GPT] Injected pantry into mocktail prompt from:', INGREDIENTS_PATH)
-    } else {
-      console.warn('[GPT] Mocktail mode but pantry unavailable — model will have no ingredient list.')
+  // Whenever the user has dropped an inventory list into /inventory, treat it
+  // as the authoritative pantry and constrain BOTH cocktail and mocktail recipes
+  // to those ingredients. Mocktails always inject the pantry (even from legacy
+  // /data) for backwards compatibility.
+  const pantryResult = loadIngredientsPantry()
+  const pantry = pantryResult?.data || null
+  const pantrySource = pantryResult?.source || null
+  const fromInventoryFolder = !!pantryResult?.fromInventoryFolder
+  const constrainToPantry = !!pantry && (isMocktail || fromInventoryFolder)
+
+  if (constrainToPantry) {
+    const header = isMocktail
+      ? 'AVAILABLE INGREDIENTS (authoritative pantry — the only ingredients you may use):'
+      : 'AVAILABLE INGREDIENTS (the bar inventory list — every recipe MUST be buildable from THIS list only; do NOT reference any ingredient that is not present here, including base spirits):'
+    systemPrompt += `\n\n${header}\n${JSON.stringify(pantry, null, 2)}`
+    if (!isMocktail) {
+      systemPrompt += `\n\nINVENTORY OVERRIDE: Earlier rules that say "you are not limited by house inventory" are SUPERSEDED. You ARE limited to the inventory list above. Each cocktail you recommend must list ingredients drawn ONLY from that list (matched by name, case-insensitive). If no recognizable cocktail can be built from the inventory, build the closest fit using the inventory and adapt the cocktail name accordingly.`
     }
+    console.log('[GPT] Injected pantry into prompt from:', pantrySource, isMocktail ? '(MOCKTAIL)' : '(COCKTAIL inventory-constrained)')
+  } else if (isMocktail) {
+    console.warn('[GPT] Mocktail mode but pantry unavailable — model will have no ingredient list.')
   }
 
   const ingredientUsageBalance = buildIngredientUsageBalance(options.orderHistory || [], pantry)
@@ -316,8 +475,11 @@ ${JSON.stringify(customerProfilePayload, null, 2)}
 `,
   ]
 
-  if (isMocktail && pantry) {
-    messageSections.push(`available_ingredients (reminder — use ONLY these ingredients, respecting each item's \`use\`/\`usage\` rules):
+  if (constrainToPantry) {
+    const reminder = isMocktail
+      ? `available_ingredients (reminder — use ONLY these ingredients, respecting each item's \`use\`/\`usage\` rules):`
+      : `available_ingredients (reminder — every recipe must be built ONLY from these ingredients; do not invent items not on this list):`
+    messageSections.push(`${reminder}
 ${JSON.stringify(pantry, null, 2)}
 `)
   }

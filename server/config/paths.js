@@ -3,6 +3,15 @@ const path = require('path')
 const PROJECT_ROOT = path.resolve(__dirname, '../..')
 const USER_UPLOADS = path.join(PROJECT_ROOT, 'userUploads')
 const USER_INPUTS = path.join(PROJECT_ROOT, 'userInputs')
+/**
+ * Top-level folder for the bar inventory list. Anything dropped here
+ * (xlsx spreadsheets, the velox_ingredients.json pantry file) becomes
+ * the authoritative source of available ingredients used for both the
+ * Inventory page and GPT recipe generation. Override with INVENTORY_DIR.
+ */
+const INVENTORY_DIR = process.env.INVENTORY_DIR
+  ? path.resolve(process.env.INVENTORY_DIR)
+  : path.join(PROJECT_ROOT, 'inventory')
 const TASTE_PROFILES_DIR = path.join(USER_INPUTS, 'tasteProfiles')
 /** Customer accounts DB (JSON). Override with CUSTOMERS_DB_PATH for deploy. */
 const DATA_DIR = process.env.CUSTOMERS_DATA_DIR
@@ -19,6 +28,7 @@ module.exports = {
   PROJECT_ROOT,
   USER_UPLOADS,
   USER_INPUTS,
+  INVENTORY_DIR,
   DATA_DIR,
   TASTE_PROFILES_DIR,
   CUSTOMERS_DB_PATH,

@@ -1,9 +1,15 @@
 const path = require('path')
+const fs = require('fs')
 const XLSX = require('xlsx')
 const router = require('express').Router()
-const { USER_UPLOADS } = require('../config/paths')
-const { getXlsxFilesInUserUploads, resolveInventoryFile } = require('../utils/fileResolution')
+const { USER_UPLOADS, INVENTORY_DIR } = require('../config/paths')
+const {
+  getInventoryFilesInUserUploads,
+  getInventoryFilesInInventoryDir,
+  resolveInventoryFile,
+} = require('../utils/fileResolution')
 const { normalizeRow } = require('../utils/excelParser')
+const { parseInventoryTextToRows } = require('../utils/inventoryTextParser')
 const { serveFile } = require('../utils/fileServe')
 const { fetchBufferFromUrl } = require('../utils/remoteFiles')
 
@@ -28,6 +34,16 @@ async function readInventoryFromSpreadsheet() {
   }
   const resolved = resolveInventoryFile()
   if (!resolved) return { items: [], total: 0, sourceFile: null, columns: [] }
+
+  if (path.extname(resolved.path).toLowerCase() === '.txt') {
+    const text = fs.readFileSync(resolved.path, 'utf-8')
+    const rawRows = parseInventoryTextToRows(text)
+    const columns = rawRows.length > 0 ? Object.keys(rawRows[0]) : ['Ingredient', 'Category', 'Quantity', 'Unit Price']
+    const items = rawRows
+      .map((row, i) => normalizeRow(row, i))
+      .filter((item) => item.name && item.name !== '—')
+    return { items, total: items.length, sourceFile: resolved.name, columns }
+  }
 
   const workbook = XLSX.readFile(resolved.path, { type: 'file' })
   let sheetName = workbook.SheetNames.find((n) => n === 'Inventory') ||
@@ -127,20 +143,27 @@ router.get('/files', (req, res) => {
         files: [{ name: 'inventory.xlsx (remote)', url: remoteUrl }],
       })
     }
-    const files = getXlsxFilesInUserUploads()
+    // Inventory folder is authoritative; userUploads is shown as a fallback.
+    const inventoryFiles = getInventoryFilesInInventoryDir()
+    const uploadFiles = getInventoryFilesInUserUploads()
+    const seen = new Set()
+    const merged = []
+    for (const f of [...inventoryFiles, ...uploadFiles]) {
+      if (seen.has(f.name)) continue
+      seen.add(f.name)
+      merged.push(f)
+    }
     const resolved = resolveInventoryFile()
-    const fileList = resolved
+    const ordered = resolved
       ? [
-          { name: resolved.name, url: `/api/inventory/file/${encodeURIComponent(resolved.name)}` },
-          ...files.filter((f) => f.name !== resolved.name).map((f) => ({
-            name: f.name,
-            url: `/api/inventory/file/${encodeURIComponent(f.name)}`,
-          })),
+          merged.find((f) => f.name === resolved.name) || { name: resolved.name },
+          ...merged.filter((f) => f.name !== resolved.name),
         ]
-      : files.map((f) => ({
-          name: f.name,
-          url: `/api/inventory/file/${encodeURIComponent(f.name)}`,
-        }))
+      : merged
+    const fileList = ordered.map((f) => ({
+      name: f.name,
+      url: `/api/inventory/file/${encodeURIComponent(f.name)}`,
+    }))
     res.json({ success: true, files: fileList })
   } catch (err) {
     console.error('GET /api/inventory/files error:', err)
@@ -151,7 +174,7 @@ router.get('/files', (req, res) => {
 router.get('/file/:filename', (req, res) => {
   try {
     const filename = decodeURIComponent(req.params.filename)
-    serveFile(req, res, filename, ['.xlsx'])
+    serveFile(req, res, filename, ['.xlsx', '.txt'])
   } catch (err) {
     console.error('GET /api/inventory/file/:filename error:', err)
     res.status(500).json({ success: false })
